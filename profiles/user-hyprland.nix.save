@@ -1,7 +1,20 @@
 { config, pkgs, lib, ... }:
 
 {
- 
+  programs.hyprland.enable = true;
+
+  #home.packages = with pkgs; [
+   # alacritty
+   # waybar
+   # bemenu
+   # hyprpaper
+   # wl-clipboard
+   # xdg-utils
+   # brightnessctl
+ # ];
+
+  xdg.enable = true;
+
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
@@ -21,7 +34,7 @@
       ];
 
       input = {
-        kb_layout = "de";
+        kb_layout = "us";
         follow_mouse = 1;
       };
 
@@ -30,12 +43,12 @@
         gaps_out = 10;
         border_size = 2;
         layout = "master";
-        #no_cursor_warps = true;
+        no_cursor_warps = true;
       };
 
       decoration = {
         rounding = 8;
-       # blur = true;
+        blur = true;
       };
 
       animations = {
@@ -66,5 +79,5 @@
     };
   };
 
-  #services.wl-clipboard.enable = true;
+  services.wl-clipboard.enable = true;
 }
