@@ -19,6 +19,7 @@ outputs = {self, nixpkgs, home-manager, ...}: {
 			./configuration.nix
 			./modules/fonts.nix
 			./modules/sway
+			./modules/hyprland
 
 			home-manager.nixosModules.home-manager {
 			 home-manager.useGlobalPkgs = true;
@@ -27,6 +28,7 @@ outputs = {self, nixpkgs, home-manager, ...}: {
 				 imports = [ 
 					./home.nix
 					./profiles/sway-user.nix
+					./profiles/user-hyprland.nix
 					];
 				};
 			}

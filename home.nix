@@ -43,8 +43,22 @@
   programs.alacritty = {
     enable = true;
     settings = {
-      font.size = 11.0;
+
       window.opacity = 0.95;
+	font = {
+	  normal = {
+            family = "Terminus";
+            style = "Regular";
+	};
+	  bold = {
+	    family = "Terminus";
+	    style = "Bold";
+	};
+	  italic = {
+	    family = "Terminus";
+            style = "Italic";
+	};	
+      };
     };
   };
 
