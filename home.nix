@@ -10,6 +10,13 @@
 
   # Packages just for your user
   home.packages = with pkgs; [
+    bemenu
+    kitty
+    hyprpaper
+    wl-clipboard
+    xdg-utils
+    brightnessctl
+ 
     firefox
     vscode
     blender
