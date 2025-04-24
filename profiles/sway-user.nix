@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+
+
   wayland.windowManager.sway = {
     enable = true;
     config = {
@@ -11,14 +13,21 @@
       # Use stacking layout by default (more like a traditional WM)
       workspaceLayout = "tabbed";
       
+   
+
       bars = [];  # No default bar since we use waybar
     };
+
+
+
     extraConfig = ''
       # Additional Sway configuration
       default_border pixel 2
       
       # For a more TUI-like appearance:
       font pango:Terminus 11
+
+      exec waybar
     '';
   };
   
@@ -52,7 +61,7 @@
         modules-right = ["pulseaudio" "network" "battery" "tray"];
       };
     };
-  };
+ };
   
   # Additional packages for the user
   home.packages = with pkgs; [

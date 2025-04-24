@@ -3,6 +3,6 @@
   imports = [
     ./sway/config.nix
     ./sway/default.nix
-    ./sway/waybar.nix
+    ./sway/waybar.nix    
   ];
 }

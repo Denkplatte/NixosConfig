@@ -17,6 +17,7 @@ outputs = {self, nixpkgs, home-manager, ...}: {
 		system = "x86_64-linux";
 		modules = [
 			./configuration.nix
+			./modules/fonts.nix
 			./modules/sway
 
 			home-manager.nixosModules.home-manager {
