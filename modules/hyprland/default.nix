@@ -5,10 +5,12 @@
 
   config = lib.mkIf config.enableHyprland {
     programs.hyprland = {
-      enable = true;
+     # enable = true;
       xwayland.enable = true;
     };
+
+    services.xserver.displayManager.sessionPackages = [ pkgs.hyprland];
   };
 
-  services.xserver.displayManager.sessionPackages = [ pkgs.hyprland];
+ 
 }

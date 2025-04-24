@@ -5,7 +5,7 @@
     enable = true;
     settings = {
       monitor = ",preferred,auto,1";
-      exec-once = "foot"; # or any terminal you like
+      exec-once = "Alacritty"; # or any terminal you like
       env = [
         "WLR_NO_HARDWARE_CURSORS,1"
         "GBM_BACKEND,nvidia-drm"

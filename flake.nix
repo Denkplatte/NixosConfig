@@ -18,7 +18,7 @@ outputs = {self, nixpkgs, home-manager, ...}: {
 		modules = [
 			./configuration.nix
 			./modules/fonts.nix
-			./modules/sway
+			#./modules/sway
 			./modules/hyprland
 
 			home-manager.nixosModules.home-manager {
@@ -27,7 +27,7 @@ outputs = {self, nixpkgs, home-manager, ...}: {
 			 home-manager.users.las = { ... } : {
 				 imports = [ 
 					./home.nix
-					./profiles/sway-user.nix
+					#./profiles/sway-user.nix
 					./profiles/user-hyprland.nix
 					];
 				};
