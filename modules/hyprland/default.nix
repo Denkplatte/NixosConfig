@@ -9,4 +9,6 @@
       xwayland.enable = true;
     };
   };
+
+  services.xserver.displayManager.sessionPackages = [ pkgs.hyprland];
 }
