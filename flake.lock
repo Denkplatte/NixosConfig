@@ -1,5 +1,23 @@
 {
   "nodes": {
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1681202837,
+        "narHash": "sha256-H+Rh19JDwRtpVPAWp64F+rlEtxUWBAQW28eAi3SRSzg=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "cfacdce06f30d2b68473a46042957675eebb3401",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -21,7 +39,43 @@
         "type": "github"
       }
     },
+    "newm-atha": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs",
+        "pywmpkg": "pywmpkg"
+      },
+      "locked": {
+        "lastModified": 1691532543,
+        "narHash": "sha256-+5Dd4TJxLlIFJJuEPmbsmM+ZiFeaogDVWsBXvR3sV3M=",
+        "owner": "~atha",
+        "repo": "newm-atha",
+        "rev": "20e86be145881becd53a73b7c2ff24fde3f7b87e",
+        "type": "sourcehut"
+      },
+      "original": {
+        "owner": "~atha",
+        "repo": "newm-atha",
+        "type": "sourcehut"
+      }
+    },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1683286087,
+        "narHash": "sha256-xseOd7W7xwF5GOF2RW8qhjmVGrKoBz+caBlreaNzoeI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "3e313808bd2e0a0669430787fb22e43b2f4bf8bf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1744440957,
         "narHash": "sha256-FHlSkNqFmPxPJvy+6fNLaNeWnF1lZSgqVCl/eWaJRc4=",
@@ -37,10 +91,51 @@
         "type": "github"
       }
     },
+    "pywmpkg": {
+      "inputs": {
+        "flake-utils": [
+          "newm-atha",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "newm-atha",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1683389971,
+        "narHash": "sha256-HI4jkvH+CCxSTDFcJ0R69tV7dD34NMFklGFDStU3uHo=",
+        "owner": "~atha",
+        "repo": "pywm-atha",
+        "rev": "4bfa3c75ba6678aeed8b3b33b2c4f43453d4319a",
+        "type": "sourcehut"
+      },
+      "original": {
+        "owner": "~atha",
+        "repo": "pywm-atha",
+        "type": "sourcehut"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs"
+        "newm-atha": "newm-atha",
+        "nixpkgs": "nixpkgs_2"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
       }
     }
   },

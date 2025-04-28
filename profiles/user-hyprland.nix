@@ -8,10 +8,9 @@
       monitor = ",preferred,auto,1";
       exec-once = [
         "waybar"
-        "hyprpaper"
         "alacritty"
-        "bemenu-run"
-      ];
+        ];
+
       env = [
         "WLR_NO_HARDWARE_CURSORS,1"
         "GBM_BACKEND,nvidia-drm"

@@ -64,6 +64,13 @@
 { config, pkgs, lib, ... }:
 
 {
+
+ imports = [
+    ##../wayland-base.nix
+    ##./config.nix
+    ./waybar.nix
+  ];
+
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
