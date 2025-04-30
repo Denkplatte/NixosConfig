@@ -32,7 +32,7 @@
   time.timeZone = "Europe/Berlin";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+  #i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "de_DE.UTF-8";
@@ -47,17 +47,72 @@
   };
 
 
-  # Enable the X11 windowing system.added to lines to test newm
-  services.xserver.enable = true;
+  # Enable the X11 windowing system.
+  #services.xserver.enable = true;
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-
+  #services.xserver.displayManager.gdm.enable = true;
   #New line for testing newm
   services.xserver.displayManager.gdm.wayland = true;
-
-
-
+  #Enable gnome
   services.xserver.desktopManager.gnome.enable = true;
+
+
+  services.greetd.enable = true;
+  services.greetd.settings = {
+  default_session = {
+    command = "tuigreet"; #exec "/etc/profiles/per-user/las/bin/start-newm"; #"tuigreet"; # or "tuigreet" if you want terminal-only
+    user = "greeter"; # usually "greeter"
+  };
+ };
+
+#  environment.etc."greetd/sessions/hyprland.desktop".text = ''
+#    [Desktop Entry]
+#    Name=Hyprland
+#    Exec=Hyprland
+#  '';
+
+#  environment.etc."greetd/sessions/gnome.desktop".text = ''
+#    [Desktop Entry]
+#    Name=GNOME
+#    Exec=gnome-session
+#  '';
+
+#  environment.etc."greetd/sessions/newm.desktop".text = ''
+#    [Desktop Entry]
+#    Name=newm
+#    Exec=start-newm -d
+#    Type = Application
+#  '';
+
+#  services.greetd = {
+#   enable = true;
+#   settings = {
+#    default_session = {
+#      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --sessions ${pkgs.writeText "session-dirs" ''
+#        hyprland
+#        gnome
+#        newm
+#      ''} --cmd ${pkgs.writeShellScript "session-wrapper" ''
+#        session="$1"
+#        if [ "$session" = "hyprland" ]; then
+#          exec Hyprland
+#        elif [ "$session" = "newm" ]; then
+#          exec start-newm -d
+#        elif [ "$session" = "gnome" ]; then
+#          exec gnome-session
+#        else
+#          exec "$session"
+#        fi
+#      ''}";
+#      user = "greeter";
+#    };
+#  };
+# };
+
+
+
+
+
 
 
 
@@ -90,7 +145,7 @@
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.las = {
@@ -101,6 +156,14 @@
     #  thunderbird
     ];
   };
+
+  users.users.greeter = {
+    isSystemUser = true;
+    description = "Greetd greeter user";
+    extraGroups = [ "video" "input" "seat" ];
+  };
+
+
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -119,7 +182,7 @@
    figlet
    lolcat
    imagemagick
-   
+   greetd.tuigreet     
 
   ];
 

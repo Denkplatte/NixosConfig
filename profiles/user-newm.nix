@@ -27,7 +27,7 @@
     
     def on_startup():
         os.system("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots")
-        os.system("catapult &")
+        #os.system("catapult &")
         os.system("waybar &")
     
     def on_reconfigure():
@@ -91,7 +91,7 @@
     
     mod = PYWM_MOD_LOGO
     background = {
-        'path': '/home/Downloads/miami.jpg',
+        'path': '/home/las/Downloads/miami.jpg',
         'time_scale': 0.125,
         'anim': True,
     }
@@ -120,13 +120,13 @@
         ("M-Return", lambda: os.system("alacritty &")),
         ("M-e", lambda: os.system("emacsclient -c -a \"emacs\" &")),
         ("M-c", lambda: os.system("brave --enable-features=UseOzonePlatform --ozone-platform=wayland &")),
-        ("M-m", lambda: os.system("bash /$HOME/.shell/macho-gui.sh &")),
+        #("M-m", lambda: os.system("bash /$HOME/.shell/macho-gui.sh &")),
         ("M-q", lambda: layout.close_view()),
         ("M-p", lambda: layout.ensure_locked(dim=True)),
         ("M-P", lambda: layout.terminate()),
         ("M-C", lambda: layout.update_config()),
         # ("M-r", lambda: os.system("catapult &")),
-        ("M-r", lambda: os.system("bemenu  &")),
+        ("M-d", lambda: os.system("bemenu-run")),
         ("M-f", lambda: layout.toggle_fullscreen()),
         ("ModPress", lambda: layout.toggle_overview(only_active_workspace=False)),
     ]
