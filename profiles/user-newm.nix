@@ -1,6 +1,46 @@
 { pkgs, ... }:
 
+let
+  homeDir = "/home/las";
+in
 {
+  home.username = "las";
+  home.homeDirectory = homeDir;
+
+  home.file."wayland-env.sh".text = ''
+    #!/bin/sh
+    export XDG_SESSION_TYPE=wayland
+    export XDG_SESSION_DESKTOP=wlroots
+    export XDG_CURRENT_DESKTOP=wlroots
+    export XDG_CURRENT_SESSION=wlroots
+    export TDESKTOP_DISABLE_GTK_INTEGRATION=1
+    export CLUTTER_BACKEND=wayland
+    export BEMENU_BACKEND=wayland
+    export MOZ_ENABLE_WAYLAND=1
+    export QT_QPA_PLATFORM=wayland-egl
+    export QT_WAYLAND_FORCE_DPI=physical
+    export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+    export ELM_DISPLAY=wl
+    export ECORE_EVAS_ENGINE=wayland_egl
+    export ELM_ENGINE=wayland_egl
+    export ELM_ACCEL=opengl
+    export SDL_VIDEODRIVER=wayland
+    export _JAVA_AWT_WM_NONREPARENTING=1
+    export NO_AT_BRIDGE=1
+    export WINIT_UNIX_BACKEND=wayland
+  '';
+
+  home.file."newm-run.sh" = {
+    text = ''
+      #!/bin/sh
+      source "${homeDir}/wayland-env.sh"
+      sleep 0.5
+      exec start-newm
+    '';
+    executable = true;
+  };
+
+
   # Deploy the NewM config to the user's config directory
   home.file.".config/newm/config.py".text = ''
     from __future__ import annotations
@@ -44,9 +84,11 @@
 
     focus = {
         'enabled': True,
-        'color' :'#19CEEB55',
+        'color' :'#FF000095',
         'distance': 4,
-        'animate_on_change': True
+        'animate_on_change': True,
+        'width' : 2,
+        'anim_time' : 0.2
     } 
 
 
@@ -71,6 +113,9 @@
             ("L-C-l", lambda: layout.resize_focused_view(1, 0)),
 
             ("L-Return", lambda: os.system("alacritty &")),
+
+            ("L-r", lambda: os.system("bemenu-run &")),
+
             ("L-q", lambda: layout.close_focused_view()),
 
             ("L-p", lambda: layout.ensure_locked(dim=True)),

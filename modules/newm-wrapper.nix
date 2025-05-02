@@ -5,8 +5,9 @@ let
     name = "newm";
     desktopName = "NewM";
     comment = "NewM Wayland Compositor";
-    exec = "env HOME=/home/las ${newm-atha.packages.${pkgs.system}.newm-atha}/bin/start-newm --config /home/las/.config/newm/config.py";
+   # exec = "env HOME=/home/las ${newm-atha.packages.${pkgs.system}.newm-atha}/bin/start-newm --config /home/las/.config/newm/config.py";
     #exec = "${newm-atha.packages.${pkgs.system}.newm-atha}/bin/start-newm --config /home/las/.config/newm/config.py";
+    exec = "/home/las/newm-run.sh";
     type = "Application";
   };
 
