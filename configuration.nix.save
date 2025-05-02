@@ -61,24 +61,11 @@
    enable = true;
    settings = {
     default_session = {
-      command = ''
-       tuigreet \
-        --remember \
-        --remember-session \
-        --greeting "Welcome to Denkplatte" \
-      '';
+      command = "tuigreet";
       user = "greeter";
     };
   };
 };
-
-
-
-
-
-
-
-
 
 
 
@@ -105,7 +92,7 @@
 #  environment.etc."greetd/sessions/newm.desktop".text = ''
 #    [Desktop Entry]
 #    Name=newm
-#    Exec=/run/current-sustem/sw/bin/start-newm
+#    Exec=start-newm -d
 #    Type = Application
 #  '';
 

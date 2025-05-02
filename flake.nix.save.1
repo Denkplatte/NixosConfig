@@ -17,11 +17,8 @@
         ./modules/fonts.nix
         ./modules/hyprland
         ./modules/newm-wrapper.nix
-        {
-         _module.args = { 
-           newm-atha = newm-atha;
-         };   
-        }
+	
+
         ({ pkgs, ... }: {
           environment.systemPackages = [
             newm-atha.packages.${pkgs.system}.newm-atha
@@ -37,10 +34,9 @@
               ./home.nix
               ./profiles/user-hyprland.nix
               ./profiles/user-waybar.nix
-              #./profiles/user-newm.nix
-              (import ./profiles/user-newm.nix {
-                inherit pkgs newm-atha;
-              })
+              #(import ./profiles/user-newm.nix {
+              #  inherit pkgs newm-atha;
+              #})
             ];
           };
         }

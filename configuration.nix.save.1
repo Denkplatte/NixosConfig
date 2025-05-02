@@ -63,8 +63,7 @@
     default_session = {
       command = ''
        tuigreet \
-        --remember \
-        --remember-session \
+        --sessions /etc/greetd/sesssions/ \
         --greeting "Welcome to Denkplatte" \
       '';
       user = "greeter";
@@ -90,24 +89,24 @@
 #  };
 # };
 
-#  environment.etc."greetd/sessions/hyprland.desktop".text = ''
-#    [Desktop Entry]
-#    Name=Hyprland
-#    Exec=Hyprland
-#  '';
+  environment.etc."greetd/sessions/hyprland.desktop".text = ''
+    [Desktop Entry]
+    Name=Hyprland
+    Exec=Hyprland
+  '';
 
-#  environment.etc."greetd/sessions/gnome.desktop".text = ''
-#    [Desktop Entry]
-#    Name=GNOME
-#    Exec=gnome-session
-#  '';
+  environment.etc."greetd/sessions/gnome.desktop".text = ''
+    [Desktop Entry]
+    Name=GNOME
+    Exec=gnome-session
+  '';
 
-#  environment.etc."greetd/sessions/newm.desktop".text = ''
-#    [Desktop Entry]
-#    Name=newm
-#    Exec=/run/current-sustem/sw/bin/start-newm
-#    Type = Application
-#  '';
+  environment.etc."greetd/sessions/newm.desktop".text = ''
+    [Desktop Entry]
+    Name=newm
+    Exec=/run/current-sustem/sw/bin/start-newm
+    Type = Application
+  '';
 
 
 
@@ -127,7 +126,33 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable sound with pipewire.
+{ config, lib, pkgs, newm-atha, ... }:
+
+let
+  newm-session = pkgs.makeDesktopItem {
+    name = "newm";
+    desktopName = "NewM";
+    comment = "NewM Wayland Compositor";
+    exec = "${newm-atha.packages.${pkgs.system}.newm-atha}/bin/start-newm";
+    type = "Application";
+  };
+
+  newm-wrapped = pkgs.symlinkJoin {
+    name = "newm-atha-wrapped";
+    paths = [ newm-atha.packages.${pkgs.system}.newm-atha ];
+    buildInputs = [ pkgs.makeWrapper ];
+    passthru.providedSessions = [ "newm" ];
+    postBuild = ''
+      mkdir -p $out/share/wayland-sessions
+      mkdir -p $out/share/xsessions
+      cp ${newm-session}/share/applications/newm.desktop $out/share/wayland-sessions/
+      cp ${newm-session}/share/applications/newm.desktop $out/share/xsessions/
+    '';
+  };
+in {
+  environment.systemPackages = [ newm-wrapped ];
+  services.xserver.displayManager.sessionPackages = [ newm-wrapped ];
+}  # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
