@@ -60,7 +60,7 @@ in
       /* Special styling for figlet image module using background-image */
       #custom-nixos {
         background-image:url('/home/las/.config/waybar/images/LOGOAINegative.png');
-        background-position: center;
+        background-position: left;
         background-repeat: no-repeat;
         background-size: contain;
       }
@@ -84,6 +84,11 @@ in
     settings = [{
       layer = "top";
       position = "top";
+
+      exclusive = true;
+      passthrough = false;
+      gtk-layer-shell = true;
+
       height = 30;
       spacing = 4;
       modules-left = [
@@ -102,7 +107,7 @@ in
       
       "custom/nixos" = {
         # Empty format since we're using CSS background image
-        format = "			";
+        format = "                                                                           ";
         tooltip = false;
       };
       

@@ -135,11 +135,32 @@ in
         'lock': {
             'cmd': 'alacritty -e newm-panel-basic lock',
         },
+        'launcher': {
+            'cmd': 'alacritty -e newm-panel-basic launcher'
+        },
+        'top_bar': {
+            'native': {
+                'enabled': False,
+                'texts': lambda: [
+                    pwd.getpwuid(os.getuid())[0],
+                    time.strftime("%c"),
+                ],
+            }
+        },
+        'bottom_bar': {
+            'native': {
+                'enabled': False,
+                'texts': lambda: [
+                    "newm",
+                    "powered by pywm"
+                ],
+            }
+        },
         'bar': {
             'cmd': "waybar",
             'visible_normal': False,
-            'visible_fullscreen': False
-        }
+            'visible_fullscreen': False,
+        },
     }
 
     energy = {
