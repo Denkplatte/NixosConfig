@@ -15,7 +15,7 @@
     wl-clipboard
     xdg-utils
     brightnessctl
- 
+    wezterm
     firefox
     vscode
     blender
@@ -71,6 +71,16 @@
       };
     };
   };
+
+  #home.file.".config/waybar/volume-bar.sh".source = ./scripts/volume-bar.sh;
+
+
+  imports = [
+    ./profiles/user-hyprland.nix
+    ./profiles/user-waybar.nix
+    ./profiles/user-newm.nix
+  ];
+
 
   # Don't change this after first install
   home.stateVersion = "24.11";

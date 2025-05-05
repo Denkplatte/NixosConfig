@@ -26,6 +26,26 @@ in
     imagemagick
     figletImageScript
   ];
+
+  home.file."/.config/waybar/volume-bar.sh" = {
+   text = ''
+    #!/usr/bin/env bash
+
+    # Get current volume (assumes PulseAudio or PipeWire with pactl)
+    VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
+
+    # Build bar: 10 chars total
+    FILLED=$(( VOLUME / 10 ))
+    EMPTY=$(( 10 - FILLED ))
+    BAR=$(printf "[%0.s#" $(seq 1 $FILLED))
+    BAR+=$(printf "%0.s-" $(seq 1 $EMPTY))
+    BAR+="]"
+
+    echo "{\"text\": \"$BAR\", \"tooltip\": \"Volume: $VOLUME%\"}"
+  '';
+  executable = true;
+ };
+
   
   programs.waybar = {
     enable = true;
@@ -64,6 +84,11 @@ in
         background-repeat: no-repeat;
         background-size: contain;
       }
+
+      #custom-volume-bar {
+        color: @color2;
+      }
+
       #battery.charging {
         color: @color4;
       }
@@ -103,12 +128,20 @@ in
         "battery"
         "pulseaudio"
         "tray"
+        "custom/volume-bar"
       ];
       
       "custom/nixos" = {
         # Empty format since we're using CSS background image
         format = "                                                                           ";
         tooltip = false;
+      };
+
+
+      "custom/volume-bar"= {
+       exec ="/home/las/.config/waybar/volume-bar.sh";
+       interval= 2;
+       return-type = "json";
       };
       
       # Rest of your configuration remains the same

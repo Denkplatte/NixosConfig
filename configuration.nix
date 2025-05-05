@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./nvidia.nix
-      ./modules
+      #./modules
   
     ];
 
@@ -75,46 +75,6 @@
 
 
 
-
-
-
-
-
-
-
-#  services.greetd.enable = true;
-#  services.greetd.settings = {
-#  default_session = {
-#    command = "tuigreet"; #exec "/etc/profiles/per-user/las/bin/start-newm"; #"tuigreet"; # or "tuigreet" if you want terminal-only
-#    user = "greeter"; # usually "greeter"
-#  };
-# };
-
-#  environment.etc."greetd/sessions/hyprland.desktop".text = ''
-#    [Desktop Entry]
-#    Name=Hyprland
-#    Exec=Hyprland
-#  '';
-
-#  environment.etc."greetd/sessions/gnome.desktop".text = ''
-#    [Desktop Entry]
-#    Name=GNOME
-#    Exec=gnome-session
-#  '';
-
-#  environment.etc."greetd/sessions/newm.desktop".text = ''
-#    [Desktop Entry]
-#    Name=newm
-#    Exec=/run/current-sustem/sw/bin/start-newm
-#    Type = Application
-#  '';
-
-
-
-
-
-
-
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "de";
@@ -173,7 +133,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+   neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
    wget
    nano
    btop
@@ -182,7 +142,7 @@
    lolcat
    imagemagick
    greetd.tuigreet     
-
+   libinput
   ];
 
 

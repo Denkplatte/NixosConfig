@@ -6,9 +6,9 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Moved outside of home-manager as requested
     newm-atha.url = "sourcehut:~atha/newm-atha";
   };
+
   outputs = { self, nixpkgs, home-manager, newm-atha, ... }: {
     nixosConfigurations.Denkplatte = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -18,31 +18,20 @@
         ./modules/hyprland
         ./modules/newm-wrapper.nix
         {
-         _module.args = { 
-           newm-atha = newm-atha;
-         };   
+          _module.args = {
+            newm-atha = newm-atha;
+          };
         }
         ({ pkgs, ... }: {
           environment.systemPackages = [
             newm-atha.packages.${pkgs.system}.newm-atha
           ];
-          # Optional: Add this if you want the NEWM binary in system path
           environment.pathsToLink = [ "/bin" ];
         })
         home-manager.nixosModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.las = { pkgs, ... }: {
-            imports = [
-              ./home.nix
-              ./profiles/user-hyprland.nix
-              ./profiles/user-waybar.nix
-              #./profiles/user-newm.nix
-              (import ./profiles/user-newm.nix {
-                inherit pkgs newm-atha;
-              })
-            ];
-          };
+          home-manager.users.las = import ./home.nix;
         }
       ];
     };
