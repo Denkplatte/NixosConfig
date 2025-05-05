@@ -82,7 +82,7 @@ in
     '';
     
     settings = [{
-      layer = "top";
+      layer = "bottom";
       position = "top";
 
       exclusive = true;
