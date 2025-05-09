@@ -49,6 +49,7 @@ in
     import logging
     from newm.layout import Layout
     from newm.helper import BacklightManager, WobRunner, PaCtl
+    from newm.view import View
 
     from pywm import (
         PYWM_MOD_LOGO,
@@ -97,6 +98,20 @@ in
         'animate_on_change': True,
         'width': 2,
         'anim_time': 0.2
+    }
+
+
+    view = {
+        'padding': 8,
+        #"fullscreen_padding": 0,
+        #"send_fullscreen": False,
+        #"accept_fullscreen": False,
+        #"sticky_fullscreen": True,
+        #"floating_min_size": False,
+        # "border_ws_switch": 3,
+        #"rules": rules,
+        #"debug_scaling": False,
+        'ssd': {'enabled': True},
     }
 
     

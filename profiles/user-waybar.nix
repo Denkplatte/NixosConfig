@@ -27,25 +27,90 @@ in
     figletImageScript
   ];
 
-  home.file."/.config/waybar/volume-bar.sh" = {
-   text = ''
+home.file."/.config/waybar/battery-bar.sh" = {
+  text = ''
     #!/usr/bin/env bash
+    # Simple 3-line battery indicator script
+    # Get battery percentage
+    BATTERY=$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo "?")
+    # Check if charging
+    CHARGING=$(cat /sys/class/power_supply/BAT0/status 2>/dev/null | grep -q "Charging" && echo "+" || echo "")
 
-    # Get current volume (assumes PulseAudio or PipeWire with pactl)
-    VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
+    # Total width of the battery interior (in characters)
+    INTERIOR_WIDTH=14
 
-    # Build bar: 10 chars total
-    FILLED=$(( VOLUME / 10 ))
-    EMPTY=$(( 10 - FILLED ))
-    BAR=$(printf "[%0.s#" $(seq 1 $FILLED))
-    BAR+=$(printf "%0.s-" $(seq 1 $EMPTY))
-    BAR+="]"
+    # Calculate filled blocks based on battery percentage
+    FILLED_WIDTH=$(( BATTERY * INTERIOR_WIDTH / 100 ))
 
-    echo "{\"text\": \"$BAR\", \"tooltip\": \"Volume: $VOLUME%\"}"
+    # Create the battery fill characters with spaces
+    FILLED=""
+    for ((i=0; i<$FILLED_WIDTH; i++)); do
+      FILLED="''${FILLED}█"
+    done
+    
+    # Add spaces after FILLED if needed
+    #FILLED="''${FILLED}    " # Add 4 spaces after filled section
+    
+    EMPTY=""
+    for ((i=$FILLED_WIDTH; i<$INTERIOR_WIDTH; i++)); do
+      EMPTY="''${EMPTY}░"
+    done
+
+    EMPTY="''${EMPTY} "
+
+    # Build the simple battery display
+    LINE1="   ╔══════════════╗   "
+    LINE2="   ║''${FILLED}''${EMPTY}║''${CHARGING}   "
+    LINE3="   ╚══════════════╝   "
+
+    # For Waybar, we need to output a single line
+    # We'll use \n to create line breaks within the JSON text field
+    BATTERY_DISPLAY="''${LINE1}\n''${LINE2}\n''${LINE3}"
+
+    # Output for Waybar with proper escaping
+    echo "{\"text\": \"''${BATTERY_DISPLAY}\", \"tooltip\": \"Battery: ''${BATTERY}%\"}"
   '';
   executable = true;
- };
-
+};
+home.file."/.config/waybar/volume-bar.sh" = {
+  text = ''
+    #!/usr/bin/env bash
+    # Get current volume (0–100)
+    VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
+    
+    # Total number of bar segments
+    TOTAL_BLOCKS=20
+    
+    # Calculate how many should be filled with #
+    # Cap FILLED at TOTAL_BLOCKS to prevent bar from expanding
+    if [ "$VOLUME" -gt 100 ]; then
+        FILLED=$TOTAL_BLOCKS
+    else
+        FILLED=$(( VOLUME * TOTAL_BLOCKS / 100 ))
+    fi
+    EMPTY=$(( TOTAL_BLOCKS - FILLED ))
+    
+    # Generate bar
+    FILLED_BAR=""
+    for ((i=0; i<$FILLED; i++)); do
+        FILLED_BAR="''${FILLED_BAR}#"
+    done
+    
+    EMPTY_BAR=""
+    for ((i=0; i<$EMPTY; i++)); do
+        EMPTY_BAR="''${EMPTY_BAR}-"
+    done
+    
+    # Final bar
+    BAR="[''${FILLED_BAR}''${EMPTY_BAR}]"
+    
+    # Output for Waybar
+    echo "{\"text\": \"$BAR\", \"tooltip\": \"Volume: $VOLUME%\"}"
+    # Debug output if needed
+    # echo "Volume: $VOLUME%, Filled: $FILLED, Empty: $EMPTY" >> /tmp/volume-debug.log
+  '';
+  executable = true;
+};
   
   programs.waybar = {
     enable = true;
@@ -81,12 +146,16 @@ in
       #custom-nixos {
         background-image:url('/home/las/.config/waybar/images/LOGOAINegative.png');
         background-position: left;
-        background-repeat: no-repeat;
-        background-size: contain;
+        background-repeat:repeat;
+        background-size:cover;
       }
 
       #custom-volume-bar {
         color: @color2;
+      }
+
+      #custom-battery {
+        color: @color4;
       }
 
       #battery.charging {
@@ -125,7 +194,7 @@ in
         "cpu"
         "memory"
         "network"
-        "battery"
+        "custom/battery"
         "pulseaudio"
         "tray"
         "custom/volume-bar"
@@ -135,6 +204,12 @@ in
         # Empty format since we're using CSS background image
         format = "                                                                           ";
         tooltip = false;
+      };
+
+      "custom/battery"= {
+      exec ="~/.config/waybar/battery-bar.sh";
+      interval= 30;
+      return-type = "json";
       };
 
 

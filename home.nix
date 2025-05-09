@@ -20,6 +20,7 @@
     vscode
     blender
     pywal
+    spotify-player
 
   ];
 

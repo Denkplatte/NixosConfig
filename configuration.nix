@@ -143,6 +143,8 @@
    imagemagick
    greetd.tuigreet     
    libinput
+   pulseaudio
+   
   ];
 
 
