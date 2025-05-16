@@ -74,7 +74,6 @@
 
 
 
-
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "de";
@@ -110,7 +109,7 @@
   users.users.las = {
     isNormalUser = true;
     description = "las";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "seat" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -144,7 +143,18 @@
    greetd.tuigreet     
    libinput
    pulseaudio
-   
+   seatd
+   mesa
+   mesa.drivers
+   libdrm
+   wlroots
+   xwayland
+   wayland
+   egl-wayland
+   pciutils
+   libxkbcommon
+   mesa-demos
+   gamescope
   ];
 
 

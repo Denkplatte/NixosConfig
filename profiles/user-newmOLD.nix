@@ -8,32 +8,21 @@ in
 
   home.file."wayland-env.sh".text = ''
     #!/bin/sh
-    export XDG_SESSION_TYPE=wayland
-    export XDG_SESSION_DESKTOP=wlroots
-    export XDG_CURRENT_DESKTOP=wlroots
-    export XDG_CURRENT_SESSION=wlroots
-    export TDESKTOP_DISABLE_GTK_INTEGRATION=1
-    export CLUTTER_BACKEND=wayland
-    export BEMENU_BACKEND=wayland
-    export MOZ_ENABLE_WAYLAND=1
-    export QT_QPA_PLATFORM=wayland-egl
-    export QT_WAYLAND_FORCE_DPI=physical
-    export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-    export ELM_DISPLAY=wl
-    export ECORE_EVAS_ENGINE=wayland_egl
-    export ELM_ENGINE=wayland_egl
-    export ELM_ACCEL=opengl
-    export SDL_VIDEODRIVER=wayland
-    export _JAVA_AWT_WM_NONREPARENTING=1
-    export NO_AT_BRIDGE=1
-    export WINIT_UNIX_BACKEND=wayland
+    # Graphics related
+    export WLR_NO_HARDWARE_CURSORS=1
+    export WLR_RENDERER="gles2"
+    export WLR_RENDERER_ALLOW_SOFTWARE=1
 
-    export SDL_VIDEODRIVER=wayland
-    export DBUS_SESSION_BUS_ADDRESS
-    export DBUS_SESSION_BUS_PID
+    # Fix DRI
+    export LIBGL_DRI3_DISABLE=1
 
+    # Fix the EGL issues
+    export EGL_PLATFORM=wayland
+    unset QT_QPA_PLATFORM
+    export QT_QPA_PLATFORM=wayland
 
-    export WLR_DRM_DEVICES=/dev/dri/card0
+    # Try to force the right GPU
+    export WLR_DRM_DEVICES=/dev/dri/card0:/dev/dri/card1
   '';
 
   home.file."newm-run.sh" = {
@@ -41,7 +30,7 @@ in
       #!/bin/sh
       source "${homeDir}/wayland-env.sh"
       sleep 0.5
-      exec start-newm -d
+      exec start-newm
     '';
     executable = true;
   };

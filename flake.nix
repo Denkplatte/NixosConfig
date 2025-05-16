@@ -7,6 +7,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     newm-atha.url = "sourcehut:~atha/newm-atha";
+    
+    
   };
 
   outputs = { self, nixpkgs, home-manager, newm-atha, ... }: {
@@ -15,7 +17,7 @@
       modules = [
         ./configuration.nix
         ./modules/fonts.nix
-        ./modules/hyprland
+        #./modules/hyprland
         ./modules/newm-wrapper.nix
         {
           _module.args = {
