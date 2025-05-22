@@ -18,6 +18,12 @@
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
 
+  boot.kernelParams = [ "nvidia-drm.modeset=1" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ nvidia_x11 ];
+  boot.blacklistedKernelModules = [ "nouveau" ];
+  boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+
+
   networking.hostName = "Denkplatte"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -109,7 +115,7 @@
   users.users.las = {
     isNormalUser = true;
     description = "las";
-    extraGroups = [ "networkmanager" "wheel" "seat" ];
+    extraGroups = [ "video render networkmanager" "wheel" "seat" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -125,6 +131,8 @@
 
   # Install firefox.
   programs.firefox.enable = true;
+
+  programs.xwayland.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

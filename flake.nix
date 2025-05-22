@@ -7,11 +7,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     newm-atha.url = "sourcehut:~atha/newm-atha";
-    
+
+    nixgl = {
+      url = "github:guibou/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };    
     
   };
 
-  outputs = { self, nixpkgs, home-manager, newm-atha, ... }: {
+  outputs = { self, nixpkgs, home-manager, newm-atha, nixgl, ... }: {
     nixosConfigurations.Denkplatte = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -24,6 +28,11 @@
             newm-atha = newm-atha;
           };
         }
+
+        ({ pkgs, ... }: {
+          nixpkgs.overlays = [ nixgl.overlay ];
+        })
+
         ({ pkgs, ... }: {
           environment.systemPackages = [
             newm-atha.packages.${pkgs.system}.newm-atha

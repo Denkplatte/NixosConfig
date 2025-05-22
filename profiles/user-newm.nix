@@ -33,7 +33,6 @@ in
     export DBUS_SESSION_BUS_PID
 
 
-    export WLR_DRM_DEVICES=/dev/dri/card0
   '';
 
   home.file."newm-run.sh" = {
