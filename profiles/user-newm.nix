@@ -8,30 +8,7 @@ in
 
   home.file."wayland-env.sh".text = ''
     #!/bin/sh
-    export XDG_SESSION_TYPE=wayland
-    export XDG_SESSION_DESKTOP=wlroots
-    export XDG_CURRENT_DESKTOP=wlroots
-    export XDG_CURRENT_SESSION=wlroots
-    export TDESKTOP_DISABLE_GTK_INTEGRATION=1
-    export CLUTTER_BACKEND=wayland
-    export BEMENU_BACKEND=wayland
-    export MOZ_ENABLE_WAYLAND=1
-    export QT_QPA_PLATFORM=wayland-egl
-    export QT_WAYLAND_FORCE_DPI=physical
-    export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-    export ELM_DISPLAY=wl
-    export ECORE_EVAS_ENGINE=wayland_egl
-    export ELM_ENGINE=wayland_egl
-    export ELM_ACCEL=opengl
-    export SDL_VIDEODRIVER=wayland
-    export _JAVA_AWT_WM_NONREPARENTING=1
-    export NO_AT_BRIDGE=1
-    export WINIT_UNIX_BACKEND=wayland
-
-    export SDL_VIDEODRIVER=wayland
-    export DBUS_SESSION_BUS_ADDRESS
-    export DBUS_SESSION_BUS_PID
-
+    echo "Hello"
 
   '';
 

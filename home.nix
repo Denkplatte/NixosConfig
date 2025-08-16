@@ -21,7 +21,9 @@
     blender
     pywal
     spotify-player
-
+    libreoffice
+    	
+    
   ];
 
 
@@ -84,5 +86,5 @@
 
 
   # Don't change this after first install
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
 }

@@ -12,7 +12,7 @@
       noto-fonts-cjk-sans           # Chinese/Japanese/Korean
       noto-fonts-emoji         # Color emoji
       font-awesome             # Icons for waybar/polybar etc.
-      nerdfonts                # All-in-one patch set (many glyphs/icons)
+      nerd-fonts.droid-sans-mono                # All-in-one patch set (many glyphs/icons)
     ];
   };
 }
