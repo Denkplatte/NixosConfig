@@ -14,13 +14,16 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/441e0f05-eb9e-432d-97c9-a2f9a1db9204";
+    { device = "/dev/disk/by-uuid/e5ed7c5c-4af9-4832-a85e-4333840ffdbe";
       fsType = "ext4";
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/4638cebc-62e3-4731-b574-ab0277ab1148"; }
-    ];
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 4096; # size in MB → this makes a 4 GB swapfile
+    }
+  ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

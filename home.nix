@@ -8,6 +8,16 @@
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
 
+  xdg.desktopEntries.houdini = {
+    name = "Houdini Apprentice";
+    exec = "/home/las/Downloads/result/bin/houdini %U";
+    terminal = false;
+    type = "Application";
+    icon = "/home/las/Downloads/Houdini3D_icon.png";
+    
+  };
+
+
   # Packages just for your user
   home.packages = with pkgs; [
     bemenu
@@ -25,7 +35,6 @@
     	
     
   ];
-
 
   # Git configuration
 #  programs.git = {
@@ -80,8 +89,8 @@
 
   imports = [
     ./profiles/user-hyprland.nix
-    ./profiles/user-waybar.nix
-    ./profiles/user-newm.nix
+    #./profiles/user-waybar.nix
+    #./profiles/user-newm.nix
   ];
 
 

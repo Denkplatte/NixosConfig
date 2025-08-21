@@ -132,6 +132,8 @@
   # Install firefox.
   programs.firefox.enable = true;
 
+  programs.steam.enable = true;
+
   programs.xwayland.enable = true;
 
   # Allow unfree packages
@@ -169,11 +171,16 @@
    podman
    docker
    popsicle
+   dracula-theme
+   dracula-icon-theme
+   dracula-qt5-theme
+   
   ];
  programs.nix-ld.libraries = with pkgs; [
    libstdc
   # plus whatever `ldd` reported missing
 ];
+
 
 
 # Enable flakes

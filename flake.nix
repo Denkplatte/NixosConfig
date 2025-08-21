@@ -18,6 +18,7 @@
   outputs = { self, nixpkgs, home-manager, newm-atha, nixgl, ... }: {
     nixosConfigurations.Denkplatte = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      
       modules = [
         ./configuration.nix
         ./modules/fonts.nix
