@@ -144,10 +144,10 @@ home.file."/.config/waybar/volume-bar.sh" = {
       }
       /* Special styling for figlet image module using background-image */
       #custom-nixos {
-        background-image:url('/home/las/.config/waybar/images/LOGOAINegative.png');
+        background-image:url('/home/las/.config/waybar/images/nixos-figlet.png');
         background-position: left;
         background-repeat:repeat;
-        background-size:cover;
+        background-size:contain;
       }
 
       #custom-volume-bar {

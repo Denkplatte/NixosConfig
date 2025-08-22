@@ -88,8 +88,8 @@
 
 
   imports = [
-    ./profiles/user-hyprland.nix
-    #./profiles/user-waybar.nix
+    #./profiles/user-hyprland.nix
+    ./profiles/user-waybar.nix
     #./profiles/user-newm.nix
   ];
 

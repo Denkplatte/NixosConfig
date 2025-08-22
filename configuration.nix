@@ -167,13 +167,10 @@
    godot
    niri
    nix-ld
-   distrobox
-   podman
-   docker
-   popsicle
    dracula-theme
    dracula-icon-theme
    dracula-qt5-theme
+   fuzzel
    
   ];
  programs.nix-ld.libraries = with pkgs; [
