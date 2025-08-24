@@ -192,8 +192,8 @@ in {
 
       * {
         font-family: "Terminus", "Font Awesome 5 Free", monospace;
-        font-size: 13px;
-        min-height: 40px;
+        font-size: 10px;
+        min-height: 20px;
         color: @foreground;
         background: transparent;
       }
@@ -223,7 +223,7 @@ in {
         background-position: left center;
         background-repeat: no-repeat;
         background-size: contain;
-        min-width: 60px;
+        min-width: 30px;
       }
 
      tooltip {
@@ -231,14 +231,16 @@ in {
        color: #ffffff;
       }
 
+ 
+
 
       #custom-volume-bar { color: @color2; }
       #custom-battery { color: @color4; }
       #custom-wifi { color: @color6; }
 
       /* spacing tweaks */
-     #custom-wifi { margin-right: 10px; } 
-     #custom-battery { margin-left: 20px; }
+      
+     /*#custom-battery { margin-left: 20px; }*/
      #custom-volume-bar {margin-right: 20px;}
      '';	
 
@@ -249,7 +251,7 @@ in {
       passthrough = false;
       gtk-layer-shell = true;
 
-      height = 30;
+      height = 20;
       spacing = 4;
     
 
@@ -257,6 +259,7 @@ in {
         "custom/nixos"
         "niri/workspaces"
         "clock"
+        "wlr/taskbar"
       ];
 
       modules-right = [
@@ -269,6 +272,10 @@ in {
         "tray"
         "custom/volume-bar"
       ];
+      
+     "wlr/taskbar" = {
+        "on-click" = "activate";
+      };
 
       "custom/nixos" = {
         format = " ";

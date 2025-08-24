@@ -171,6 +171,8 @@
    dracula-icon-theme
    dracula-qt5-theme
    fuzzel
+   xwayland-satellite
+   networkmanager
    
   ];
  programs.nix-ld.libraries = with pkgs; [

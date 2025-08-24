@@ -10,7 +10,7 @@
 
   xdg.desktopEntries.houdini = {
     name = "Houdini Apprentice";
-    exec = "/home/las/Downloads/result/bin/houdini %U";
+    exec = "env QT_QPA_PLATFORM=xcb /home/las/Downloads/result/bin/houdini %U";
     terminal = false;
     type = "Application";
     icon = "/home/las/Downloads/Houdini3D_icon.png";
