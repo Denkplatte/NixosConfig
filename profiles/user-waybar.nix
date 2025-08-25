@@ -257,7 +257,6 @@ in {
 
       modules-left = [
         "custom/nixos"
-        "niri/workspaces"
         "clock"
         "wlr/taskbar"
       ];
