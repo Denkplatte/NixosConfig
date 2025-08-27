@@ -173,7 +173,11 @@
    fuzzel
    xwayland-satellite
    networkmanager
-   
+   tofi
+   rofi-wayland
+   fzf
+   boxes
+   mako   
   ];
  programs.nix-ld.libraries = with pkgs; [
    libstdc
