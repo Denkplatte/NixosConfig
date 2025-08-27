@@ -9,16 +9,6 @@
     (pkgs.writeShellScriptBin "fzf-launcher" ''
       #!/usr/bin/env bash
 
-      # Enable debugging
-      DEBUG=1
-
-      debug_log() {
-        if [ "$DEBUG" = "1" ]; then
-          echo "[DEBUG] $*" >&2
-          notify-send "Debug" "$*" -t 2000
-        fi
-      }
-
       # Define search paths for desktop files
       search_paths=(
         "/run/current-system/sw/share/applications"
@@ -29,15 +19,12 @@
         "$HOME/.local/share/flatpak/exports/share/applications"
       )
 
-      debug_log "Starting app launcher"
-
       # Collect all available apps from .desktop files
       declare -A app_to_file
       temp_apps=$(mktemp)
 
       for path in "''${search_paths[@]}"; do
         if [ -d "$path" ]; then
-          debug_log "Searching in: $path"
           for desktop_file in "$path"/*.desktop; do
             [ -f "$desktop_file" ] || continue
             
@@ -49,6 +36,7 @@
             # Extract name
             name=$(grep "^Name=" "$desktop_file" | head -n1 | cut -d= -f2-)
             if [ -n "$name" ]; then
+              # Store mapping from name to file path
               app_to_file["$name"]="$desktop_file"
               echo "$name" >> "$temp_apps"
             fi
@@ -60,24 +48,18 @@
       apps=$(sort -u "$temp_apps")
       rm -f "$temp_apps"
 
-      debug_log "Found $(echo "$apps" | wc -l) applications"
-
       # Show fzf menu with figlet header
       choice=$(printf "%s\n" "$apps" | \
         fzf --ansi \
-            --header="$(figlet -f small '[!] Apps' 2>/dev/null || echo '[!] Apps')" \
+            --header="$(figlet -d ~/.local/share/figlet/fonts -f 'DOS Rebel' '[!] Apps' 2>/dev/null || figlet '[!] Apps' 2>/dev/null || echo '[!] Apps')" \
             --prompt=">> " \
             --layout=reverse-list)
 
       # Exit if nothing was chosen
       [ -z "$choice" ] && exit 0
 
-      debug_log "Selected: $choice"
-
       # Get the desktop file for the chosen app
       desktop_file="''${app_to_file[$choice]}"
-
-      debug_log "Desktop file: $desktop_file"
 
       if [ -z "$desktop_file" ] || [ ! -f "$desktop_file" ]; then
         notify-send "App Launcher" "Desktop file not found for: $choice" -t 3000
@@ -86,7 +68,6 @@
 
       # Extract Exec line
       exec_cmd=$(grep "^Exec=" "$desktop_file" | head -n1 | cut -d= -f2-)
-      debug_log "Raw exec command: $exec_cmd"
 
       if [ -z "$exec_cmd" ]; then
         notify-send "App Launcher" "No Exec command found for: $choice" -t 3000
@@ -95,48 +76,29 @@
 
       # Clean up desktop file placeholders
       clean_cmd=$(echo "$exec_cmd" | sed -E 's/ *%[fFuUdDnNickvm]+//g' | sed 's/^ *//' | sed 's/ *$//')
-      debug_log "Cleaned command: $clean_cmd"
 
       # Check if we should run in terminal
-      terminal=$(grep "^Terminal=" "$desktop_file" | cut -d= -f2- || echo "false")
-      debug_log "Terminal mode: $terminal"
+      terminal=$(grep "^Terminal=" "$desktop_file" | cut -d= -f2- 2>/dev/null || echo "false")
 
-      # Try the simplest approach first
-      debug_log "Attempting to launch..."
-      
+      # Launch with proper process detachment for window manager shortcuts
       if [ "$terminal" = "true" ]; then
-        debug_log "Launching in terminal"
-        xterm -e "$clean_cmd" &
-      else
-        debug_log "Launching normally"
-        # Try multiple methods
-        if command -v "$clean_cmd" >/dev/null 2>&1; then
-          debug_log "Command found in PATH, executing directly"
-          $clean_cmd &
+        # Launch in terminal with proper detachment
+        if command -v alacritty >/dev/null 2>&1; then
+          setsid alacritty -e bash -c "$clean_cmd; read -p 'Press Enter to close...'" >/dev/null 2>&1 &
+        elif command -v gnome-terminal >/dev/null 2>&1; then
+          setsid gnome-terminal -- bash -c "$clean_cmd; read -p 'Press Enter to close...'" >/dev/null 2>&1 &
+        elif command -v xterm >/dev/null 2>&1; then
+          setsid xterm -e bash -c "$clean_cmd; read -p 'Press Enter to close...'" >/dev/null 2>&1 &
         else
-          debug_log "Using bash -c to execute"
-          bash -c "$clean_cmd" &
+          setsid bash -c "$clean_cmd" >/dev/null 2>&1 &
         fi
+      else
+        # Launch normally with proper detachment
+        setsid bash -c "$clean_cmd" >/dev/null 2>&1 &
       fi
 
-      sleep 1
-      debug_log "Launch attempted"
-    '')
-
-    # Also create a simple test version
-    (pkgs.writeShellScriptBin "fzf-launcher-simple" ''
-      #!/usr/bin/env bash
-      
-      # Simple version using desktop-file-utils
-      choice=$(find /run/current-system/sw/share/applications ~/.local/share/applications -name "*.desktop" 2>/dev/null | \
-        xargs -I {} basename {} .desktop | \
-        sort -u | \
-        fzf --prompt="App: ")
-      
-      [ -z "$choice" ] && exit 0
-      
-      # Use gtk-launch (from desktop-file-utils) which properly handles .desktop files
-      gtk-launch "$choice" 2>/dev/null || notify-send "Failed to launch" "$choice"
+      # Give the process a moment to start properly
+      sleep 0.2
     '')
   ];
 }
