@@ -62,6 +62,15 @@
   #Enable gnome
   services.xserver.desktopManager.gnome.enable = true;
 
+  # Enable the KDE Plasma desktop
+  services.desktopManager.plasma6.enable = true;
+
+  # Enable the SDDM display manager
+  services.displayManager.sddm.enable = true;
+
+  # Optional: Enable Wayland for Plasma 6
+  services.displayManager.sddm.wayland.enable = true;
+
 
   services.greetd = {
    enable = true;
@@ -91,6 +100,12 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    };
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -173,11 +188,11 @@
    fuzzel
    xwayland-satellite
    networkmanager
-   tofi
-   rofi-wayland
    fzf
    boxes
-   mako   
+   mako
+   qbittorrent
+      
   ];
  programs.nix-ld.libraries = with pkgs; [
    libstdc
