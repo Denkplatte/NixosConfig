@@ -8,21 +8,13 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./nvidia.nix
+      ../../modules/system/boot.nix
+      ../../modules/system/nvidia.nix
       #./modules
   
     ];
 
-  # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
-
-  boot.kernelParams = [ "nvidia-drm.modeset=1" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ nvidia_x11 ];
-  boot.blacklistedKernelModules = [ "nouveau" ];
-  boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-
+  
 
   networking.hostName = "Denkplatte"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -182,8 +174,6 @@
    libxkbcommon
    mesa-demos
    gamescope
-   godot
-   niri
    nix-ld
    dracula-theme
    dracula-icon-theme
@@ -194,7 +184,6 @@
    fzf
    boxes
    mako
-   qbittorrent
       
   ];
  programs.nix-ld.libraries = with pkgs; [

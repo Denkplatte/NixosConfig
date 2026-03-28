@@ -20,7 +20,7 @@
       system = "x86_64-linux";
       
       modules = [
-        ./configuration.nix
+        ./hosts/Denkplatte/configuration.nix
         ./modules/fonts.nix
         #./modules/hyprland
         ./modules/newm-wrapper.nix
