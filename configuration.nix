@@ -107,6 +107,9 @@
     openFirewall = true;
     };
 
+
+  networking.firewall.allowedTCPPorts = [ 631 ];
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
