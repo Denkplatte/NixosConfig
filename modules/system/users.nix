@@ -6,9 +6,6 @@
     isNormalUser = true;
     description = "las";
     extraGroups = [ "video render networkmanager" "wheel" "seat" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
   };
 
   users.users.greeter = {

@@ -11,117 +11,20 @@
       ../../modules/system/boot.nix
       ../../modules/system/nvidia.nix
       ../../modules/system/locale.nix
-      #./modules
+      ../../modules/system/network.nix
+      ../../modules/system/audio.nix
+      ../../modules/system/users.nix
+      ../../modules/system/printing.nix
+      ../../modules/system/login.nix
+      ../../modules/system/packages.nix
+      
+      ../../profiles/kde.nix
   
     ];
-
-  
-
-  networking.hostName = "Denkplatte"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
  
-
-  # Enable the X11 windowing system.
-  #services.xserver.enable = true;
-  # Enable the GNOME Desktop Environment.
-  #services.xserver.displayManager.gdm.enable = true;
-  #New line for testing newm
-  services.xserver.displayManager.gdm.wayland = true;
-  #Enable gnome
-  services.xserver.desktopManager.gnome.enable = true;
-
-  # Enable the KDE Plasma desktop
-  services.desktopManager.plasma6.enable = true;
-
-  # Enable the SDDM display manager
-  services.displayManager.sddm.enable = true;
-
-  # Optional: Enable Wayland for Plasma 6
-  services.displayManager.sddm.wayland.enable = true;
-
-
-  services.greetd = {
-   enable = true;
-   settings = {
-    default_session = {
-      command = ''
-       tuigreet \
-        --remember \
-        --remember-session \
-        --greeting "Welcome to Denkplatte" \
-      '';
-      user = "greeter";
-    };
-  };
-};
-
-
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "de";
-    variant = "";
-  };
-
-  # Configure console keymap
-  console.keyMap = "de";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-    };
-
-
-  networking.firewall.allowedTCPPorts = [ 631 ];
-
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.las = {
-    isNormalUser = true;
-    description = "las";
-    extraGroups = [ "video render networkmanager" "wheel" "seat" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
-  };
-
-  users.users.greeter = {
-    isSystemUser = true;
-    description = "Greetd greeter user";
-    extraGroups = [ "video" "input" "seat" ];
-  };
-
-
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -133,44 +36,8 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-   neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-   wget
-   nano
-   btop
-   git
-   figlet
-   lolcat
-   imagemagick
-   greetd.tuigreet     
-   libinput
-   pulseaudio
-   seatd
-   mesa
-   libdrm
-   wlroots
-   xwayland
-   wayland
-   egl-wayland
-   pciutils
-   libxkbcommon
-   mesa-demos
-   gamescope
-   nix-ld
-   dracula-theme
-   dracula-icon-theme
-   dracula-qt5-theme
-   fuzzel
-   xwayland-satellite
-   networkmanager
-   fzf
-   boxes
-   mako
-      
-  ];
- programs.nix-ld.libraries = with pkgs; [
+
+   programs.nix-ld.libraries = with pkgs; [
    libstdc
   # plus whatever `ldd` reported missing
 ];

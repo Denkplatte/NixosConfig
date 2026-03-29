@@ -1,4 +1,4 @@
-{pkgs, ...}
+{pkgs, ...}:
 
 {
   # Enable CUPS to print documents.

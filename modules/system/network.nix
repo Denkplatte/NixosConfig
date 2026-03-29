@@ -10,4 +10,14 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+ 
+  networking.firewall.allowedTCPPorts = [ 631 ];
+  
+
+   services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    };
+
 }
