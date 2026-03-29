@@ -105,5 +105,5 @@
 
 
   # Don't change this after first install
-  home.stateVersion = "25.05";
+  home.stateVersion = "25.11";
 }

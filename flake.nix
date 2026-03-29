@@ -1,50 +1,24 @@
 {
-  description = "Basic NixOS Config";
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    newm-atha.url = "sourcehut:~atha/newm-atha";
+  description = "Clean NixOS config";
 
-    nixgl = {
-      url = "github:guibou/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };    
-    
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/25.11";
+    home-manager.url = "github:nix-community/25.11";
   };
 
-  outputs = { self, nixpkgs, home-manager, newm-atha, nixgl, ... }: {
+  outputs = { self, nixpkgs, home-manager, ... }:
+  let
+    system = "x86_64-linux";
+  in {
     nixosConfigurations.Denkplatte = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      
+      inherit system;
+
       modules = [
         ./hosts/Denkplatte/configuration.nix
-        ./modules/fonts.nix
-        #./modules/hyprland
-        ./modules/newm-wrapper.nix
+
+        home-manager.nixosModules.home-manager
         {
-          _module.args = {
-            newm-atha = newm-atha;
-          };
-        }
-
-        ({ pkgs, ... }: {
-          nixpkgs.overlays = [ nixgl.overlay ];
-        })
-
-        ({ pkgs, ... }: {
-          environment.systemPackages = [
-            newm-atha.packages.${pkgs.system}.newm-atha
-          ];
-          environment.pathsToLink = [ "/bin" ];
-        })
-        home-manager.nixosModules.home-manager {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.las = import ./home.nix;
-          home-manager.backupFileExtension = "backup";
+          home-manager.users."las" = import ./home/default.nix;
         }
       ];
     };
