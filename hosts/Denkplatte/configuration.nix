@@ -17,6 +17,7 @@
       ../../modules/system/printing.nix
       ../../modules/system/login.nix
       ../../modules/system/packages.nix
+      ../../modules/system/fonts.nix
       
       ../../profiles/kde.nix
   
