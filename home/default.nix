@@ -7,7 +7,7 @@
   home.stateVersion = "25.11";
 
 
-  #imports = [
-#	../modules/fonts.nix
- # ];
+  imports = [
+	../modules/fonts.nix
+  ];
 }

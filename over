@@ -1,0 +1,49 @@
+NixosConfig/
+│
+├── flake.nix
+├── flake.lock
+│
+├── hosts/
+│   └── Denkplatte/
+│       ├── hardware-configuration.nix
+│       ├── configuration.nix
+│
+├── modules/
+│   ├── system/
+│   │   ├── core.nix
+│   │   ├── networking.nix
+│   │   ├── users.nix
+│   │   └── audio.nix
+│   │
+│   ├── desktop/
+│   │   ├── gnome.nix
+│   │   ├── kde.nix
+│   │   └── hyprland.nix   # optional
+│   │
+│   ├── programs/
+│   │   ├── steam.nix
+│   │   ├── docker.nix
+│   │   └── virt.nix
+│   │
+│   └── packages/
+│       └── hevel.nix   # future
+│
+├── home/
+│   ├── default.nix
+│   │
+│   ├── modules/
+│   │   ├── base.nix
+│   │   ├── dev.nix
+│   │   ├── desktop.nix
+│   │   └── shell.nix
+│   │
+│   └── programs/
+│       ├── git.nix
+│       ├── alacritty.nix
+│       └── neovim.nix
+│
+└── profiles/
+    ├── gnome.nix
+    ├── kde.nix
+    ├── hyprland.nix
+    └── minimal.nix
