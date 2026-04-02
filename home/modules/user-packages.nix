@@ -1,5 +1,8 @@
-home.packages = with pkgs; [
-  houdini
-  blender
-  
-];
+{pkgs,...}:
+
+{
+
+   home.packages = with pkgs; [
+     blender
+    ];
+}

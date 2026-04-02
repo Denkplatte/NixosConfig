@@ -6,4 +6,9 @@
 
   home.stateVersion = "25.11";
 
+  imports = [
+	./modules/user-packages.nix
+	./builds/otter-launcher.nix
+  ];
+
 }
