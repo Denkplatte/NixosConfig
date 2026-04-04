@@ -34,6 +34,7 @@ environment.systemPackages = with pkgs; [
    fzf
    boxes
    ffmpeg_7-full
+   kitty
 
   ];
 }

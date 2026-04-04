@@ -4,10 +4,16 @@
   inputs = {
   nixpkgs.url = "github:NixOS/nixpkgs/25.11";
 
+  #home-manager
   home-manager = {
     url = "github:nix-community/home-manager/release-25.11";
     inputs.nixpkgs.follows = "nixpkgs";
+
   };
+
+  #launcher
+  fsel.url = "github:Mjoyufull/fsel";
+
 };
   outputs = { self, nixpkgs, home-manager, ... }:
   let
