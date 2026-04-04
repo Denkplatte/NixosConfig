@@ -56,7 +56,8 @@ home.file.".config/otter-launcher/config.toml".text = ''
   [[modules]]
   description = "desktop programs"
   prefix = "app"
-  cmd = "fsel --detach -ss {}"
+  #cmd = "fsel --detach -ss {}"
+  cmd = "fsel -vv -d -r -p \"{}\""
   with_argument = true
   
   [[modules]]
