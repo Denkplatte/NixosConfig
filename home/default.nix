@@ -9,7 +9,7 @@
   imports = [
 	./modules/user-packages.nix
 	./builds/otter-launcher.nix
-        
+        ./builds/fsel.nix
   ];
 
 }

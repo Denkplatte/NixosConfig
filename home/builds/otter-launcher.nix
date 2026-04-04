@@ -56,7 +56,8 @@ home.file.".config/otter-launcher/config.toml".text = ''
   [[modules]]
   description = "desktop programs"
   prefix = "app"
-  cmd = "fsel --detach"
+  cmd = "fsel --detach -ss {}"
+  with_argument = true
   
   [[modules]]
   description = "power menu (fzf)"
