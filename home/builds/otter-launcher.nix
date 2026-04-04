@@ -52,12 +52,12 @@ home.file.".config/otter-launcher/config.toml".text = ''
   # run cmd in a forked shell as opposed to as a child process (simply by prepending setsid -f to the configured cmd); useful for launching gui programs; taken as false if not explicitly set
   unbind_proc = true
  
-  # fzf is needed to run below functions 
+  # fsel is needed to run below functions 
   [[modules]]
   description = "desktop programs"
   prefix = "app"
-  cmd = "fsel"
-
+  cmd = "fsel --detach"
+  
   [[modules]]
   description = "power menu (fzf)"
   prefix = "po"
