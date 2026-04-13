@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, bmake, pkg-config, wayland, libdrm, pixman, libxkbcommon, libevdev, lib }:
+{ stdenv, fetchzip, bmake, pkg-config, wayland, libdrm, pixman, libxkbcommon, libevdev, neuwld, neuswc, lib }:
 
 stdenv.mkDerivation {
   pname = "hevel";
