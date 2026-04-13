@@ -1,51 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zig
-, pkg-config
-, wayland
-, libxkbcommon
-, mesa
-, libdrm
-}:
+{ stdenv, fetchzip, bmake, pkg-config, wayland, libdrm, pixman, libxkbcommon, libevdev, lib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hevel";
-  version = "git";
-
-  src = fetchFromGitHub {
-    owner = "dlm";
-    repo = "hevel";
-    rev = "main";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  version = "unstable";
+  src = fetchzip {
+    url = "https://git.sr.ht/~dlm/hevel/archive/cce195a2.tar.gz";
+    sha256 = "sha256-9B180ebZzOtv9eEICVpYSo558T0/UYEVELFztPzOX4o=";
+    
   };
-
-  nativeBuildInputs = [
-    zig
-    pkg-config
-  ];
-
-  buildInputs = [
-    wayland
-    libxkbcommon
-    mesa
-    libdrm
-  ];
-
-  buildPhase = ''
-    zig build -Doptimize=ReleaseSafe
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp zig-out/bin/hevel $out/bin/
-  '';
-
-  meta = with lib; {
-    description = "Infinite scrolling Wayland compositor";
-    homepage = "https://github.com/dlm/hevel";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [];
-  };
+ nativeBuildInputs = [ bmake pkg-config ];
+  buildInputs = [ wayland libdrm pixman libxkbcommon libevdev ];
+  buildPhase = "bmake PREFIX=$out";
+  installPhase = "bmake PREFIX=$out install";
 }
