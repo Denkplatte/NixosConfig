@@ -7,15 +7,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     fsel.url = "github:Mjoyufull/fsel";
+    
+    neu-nix = {
+      url = "github:ricardomaps/neu-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, neu-nix, ... }:
   let
     system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-    neuwld = pkgs.callPackage ./home/builds/neuwld.nix {};
-    neuswc = pkgs.callPackage ./home/builds/neuswc.nix { inherit neuwld; };
-    hevel = pkgs.callPackage ./home/builds/hevel.nix {inherit neuwld neuswc; };  # <-- this is the only new line
+    
+    
   in {
     nixosConfigurations.Denkplatte = nixpkgs.lib.nixosSystem {
       inherit system;
@@ -26,7 +29,9 @@
           home-manager.users."las" = import ./home/default.nix;
         }
         ({ ... }: {                               # <-- add hevel to packages
-          environment.systemPackages = [ hevel ];
+          environment.systemPackages = [
+	    neu-nix.packages.${system}. hevel 
+	  ];
         })
       ];
     };
