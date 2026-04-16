@@ -7,31 +7,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     fsel.url = "github:Mjoyufull/fsel";
-    
-    neu-nix = {
-      url = "github:ricardomaps/neu-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, home-manager, neu-nix, ... }:
+  outputs = { self, nixpkgs, home-manager, ... }:
   let
     system = "x86_64-linux";
-    
-    
+    pkgs = nixpkgs.legacyPackages.${system};
+    driftwm = pkgs.callPackage ./home/builds/driftwm.nix {};
   in {
     nixosConfigurations.Denkplatte = nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
         ./hosts/Denkplatte/configuration.nix
         home-manager.nixosModules.home-manager
-        {
-          home-manager.users."las" = import ./home/default.nix;
-        }
-        ({ ... }: {                               # <-- add hevel to packages
-          environment.systemPackages = [
-	    neu-nix.packages.${system}. hevel 
-	  ];
+        { home-manager.users."las" = import ./home/default.nix; }
+        ({ ... }: {
+          environment.systemPackages = [ driftwm ];
         })
       ];
     };

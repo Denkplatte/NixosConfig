@@ -35,6 +35,7 @@ environment.systemPackages = with pkgs; [
    boxes
    ffmpeg_7-full
    kitty
+   alacritty
 
   ];
 }
