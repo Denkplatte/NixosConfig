@@ -36,6 +36,7 @@ environment.systemPackages = with pkgs; [
    ffmpeg_7-full
    kitty
    alacritty
+   tuifimanager
 
   ];
 }
