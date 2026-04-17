@@ -37,6 +37,7 @@ environment.systemPackages = with pkgs; [
    kitty
    alacritty
    tuifimanager
+   superfile
 
   ];
 }
