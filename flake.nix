@@ -7,9 +7,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     fsel.url = "github:Mjoyufull/fsel";
+
+    driftwm = {
+      url = "path:./home/builds/driftwm";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, driftwm, ... }:
   let
     system = "x86_64-linux";
   in {
@@ -19,6 +24,14 @@
         ./hosts/Denkplatte/configuration.nix
         home-manager.nixosModules.home-manager
         { home-manager.users."las" = import ./home/default.nix; }
+	({pkgs, ... }:{
+	  environment.systemPackages = [
+	    driftwm.packages.${system}.default
+	  ];
+	  services.displayManager.sessionPackages = [
+	    driftwm.packages.${system}.default
+	  ];
+	})
       ];
     };
   };
