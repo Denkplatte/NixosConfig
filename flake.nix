@@ -9,7 +9,7 @@
     fsel.url = "github:Mjoyufull/fsel";
 
     driftwm = {
-	url = "path:./home/driftwm";
+	url = "path:./home/builds/driftwm";
 	inputs.nixpkgs.follows = "nixpkgs";
     };
   };
