@@ -1,0 +1,7 @@
+/target
+__pycache__
+.venv
+.ruff_cache
+*.tar.gz
+# nix build output symlink
+result
