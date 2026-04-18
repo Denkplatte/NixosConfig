@@ -10,6 +10,7 @@
 	./modules/user-packages.nix
 	./builds/otter-launcher.nix
         ./builds/fsel.nix
+	./programs/kitty.nix
   ];
 
 }
