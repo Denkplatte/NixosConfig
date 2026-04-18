@@ -13,6 +13,7 @@
 	./programs/kitty.nix
 	./programs/waybar.nix
 	./programs/superfile.nix
+	./programs/driftwm.nix
   ];
 
 }
