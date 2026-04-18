@@ -1,42 +1,48 @@
 { pkgs, ... }:
 
 let
+  t = import ../../theme/hotline-miami.nix;
+
   xeroFonts = pkgs.fetchFromGitHub {
     owner = "xero";
-    repo = "figlet-fonts";
-    rev = "master";
+    repo  = "figlet-fonts";
+    rev   = "master";
     sha256 = "sha256-/Qj8CWqn7w1R83enixxgC5ijUrHvqN3C7ZvRCs/AzBI=";
   };
 
-  banner = pkgs.runCommand "greetd-banner" {
+  # Build the banner at Nix build time — outputs a plain text file
+  bannerFile = pkgs.runCommand "greetd-banner" {
     nativeBuildInputs = [ pkgs.figlet pkgs.boxes ];
   } ''
-    figlet -d ${xeroFonts} -f "ANSI Shadow" "[ ! ]" | \
-      ${pkgs.boxes}/bin/boxes -d ansi-double > $out
+    figlet -f cricket "[ ! ]" \
+      | ${pkgs.boxes}/bin/boxes -d ansi-double \
+      > $out
   '';
 
-  welcomeScript = pkgs.writeShellScript "tuigreet-wrapper" ''
-    clear
-    printf '\033[35m'
-    cat ${banner}
-    printf '\033[36m'
-    echo ""
-    echo "   you know what you did."
-    echo ""
-    printf '\033[0m'
-    exec ${pkgs.greetd.tuigreet}/bin/tuigreet \
-      --remember \
-      --remember-session \
-      --time \
-      --theme "border=magenta;text=white;prompt=magenta;time=cyan;action=cyan;button=magenta;container=black;input=yellow"
-  '';
+  # Read the banner at eval time so we can embed it in /etc/issue
+  bannerText = builtins.readFile bannerFile;
 in
 {
+  # Write banner + welcome text into /etc/issue
+  # tuigreet renders this natively via --issue above the login box
+  environment.etc."issue".text = ''
+    ${bannerText}
+    WELCOME TO DENKPLATTE.
+
+  '';
+
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        command = "${welcomeScript}";
+        command = ''
+          ${pkgs.greetd.tuigreet}/bin/tuigreet \
+            --remember \
+            --remember-session \
+            --time \
+            --issue \
+            --theme "border=magenta;text=white;prompt=magenta;time=cyan;action=cyan;button=magenta;container=black;input=yellow"
+        '';
         user = "greeter";
       };
     };

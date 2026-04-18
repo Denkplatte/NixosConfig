@@ -11,6 +11,8 @@
 	./builds/otter-launcher.nix
         ./builds/fsel.nix
 	./programs/kitty.nix
+	./programs/waybar.nix
+	./programs/superfile.nix
   ];
 
 }
