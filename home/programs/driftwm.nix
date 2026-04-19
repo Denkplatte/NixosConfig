@@ -11,8 +11,7 @@ in
 
     autostart = [
       "waybar",
-      "fsel --daemon",
-    ]
+   ]
 
     [env]
     MOZ_ENABLE_WAYLAND = "1"
@@ -36,10 +35,6 @@ in
 
     [input.mouse]
     accel_profile = "flat"
-
-    [cursor]
-    theme = "Dracula"
-    size = 24
 
     [navigation]
     friction = 0.94
@@ -67,6 +62,10 @@ in
     blur_radius = 2
     blur_strength = 1.1
 
+    [backend]
+    wait_for_frame_completion = true
+    disable_direct_scanout = true
+
     [background]
     # uncomment and point to a wallpaper shader or image:
     # shader_path = "~/.config/driftwm/bg.glsl"
@@ -80,7 +79,7 @@ in
     "mod+r"            = "reload-config"
 
     # --- apps ---
-    "mod+d"            = "exec kitty --class fsel -e fsel"
+    "mod+d"            = "exec kitty --detach -e fsel -d"
     "mod+e"            = "exec kitty --class superfile -e superfile"
     "mod+b"            = "exec firefox"
 

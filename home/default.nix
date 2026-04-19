@@ -6,6 +6,11 @@
 
   home.stateVersion = "25.11";
 
+  home.sessionVariables = {
+    EDITOR = "nano";
+    VISUAL = "nano";
+  };
+
   imports = [
 	./modules/user-packages.nix
 	./builds/otter-launcher.nix

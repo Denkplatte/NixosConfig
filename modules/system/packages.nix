@@ -38,6 +38,10 @@ environment.systemPackages = with pkgs; [
    alacritty
    tuifimanager
    superfile
+   grim
+   slurp
+   brightnessctl
+   adwaita-icon-theme
 
   ];
 }

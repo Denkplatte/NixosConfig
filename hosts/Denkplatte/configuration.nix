@@ -19,7 +19,7 @@
       ../../modules/system/packages.nix
       ../../modules/system/fonts.nix
       
-      ../../profiles/kde.nix
+      #../../profiles/kde.nix
   
     ];
  

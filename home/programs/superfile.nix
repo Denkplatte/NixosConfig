@@ -1,32 +1,19 @@
 { pkgs, ... }:
 
-let
-  t = import ../../theme/hotline-miami.nix;
-in
 {
-  # superfile is already in system packages — just drop the theme config
-  home.file.".config/superfile/config.toml".text = ''
-    [ui]
-    border_style    = "double"
-    transparent     = false
-
-    [theme]
-    # Hotline Miami
-    bg              = ""
-    sidebar_bg      = ""
-    box_background  = ""
-
-    border          = "${t.pinkDim}"
-    selected_item   = "${t.pink}"
-    focused_border  = "${t.pink}"
-    unfocused_border = "${t.bgAlt}"
-
-    directory_icon_color  = "${t.cyan}"
-    file_icon_color       = "${t.fg}"
-    selected_icon_color   = "${t.pink}"
-
-    [general]
-    default_open_command = "xdg-open"
-    terminal             = "kitty"
-  '';
+  home.file.".config/superfile/config.toml" = {
+    force = true;
+    text = ''
+      # superfile config — only override what we need, spf merges with defaults
+      theme                   = "catppuccin-mocha"
+      nerdfont                = true
+      transparent_background  = false
+      default_open_file_preview = true
+      default_directory       = "."
+      auto_check_update       = false
+      editor                  = "nano"
+      cd_on_quit              = false
+      file_size_use_si        = false
+    '';
+  };
 }

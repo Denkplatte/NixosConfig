@@ -42,7 +42,10 @@ in
             --time \
             --issue \
             --theme "border=magenta;text=white;prompt=magenta;time=cyan;action=cyan;button=magenta;container=black;input=yellow"
-        '';
+            --env WLR_NO_HARDWARE_CURSORS = 1 \
+	    --env XCURSOR_THEME = Adwaita \
+	    --env XCURSOR_SIZE = 24 \   
+	 '';
         user = "greeter";
       };
     };

@@ -1,99 +1,177 @@
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   t = import ../../theme/hotline-miami.nix;
 in
 {
+  # --- script files ---
+  home.file.".config/waybar/battery-bar.sh" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      BATTERY=$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo "?")
+      CHARGING=$(cat /sys/class/power_supply/BAT0/status 2>/dev/null | grep -q "Charging" && echo "+" || echo "")
+
+      INTERIOR_WIDTH=14
+      FILLED_WIDTH=$(( BATTERY * INTERIOR_WIDTH / 100 ))
+
+      FILLED=""
+      for ((i=0; i<$FILLED_WIDTH; i++)); do FILLED="''${FILLED}█"; done
+      EMPTY=""
+      for ((i=$FILLED_WIDTH; i<$INTERIOR_WIDTH; i++)); do EMPTY="''${EMPTY}░"; done
+      EMPTY="''${EMPTY} "
+
+      LINE1="╔══════════════╗"
+      LINE2="║''${FILLED}''${EMPTY}║''${CHARGING}"
+      LINE3="╚══════════════╝"
+
+      BATTERY_DISPLAY="''${LINE1}\n''${LINE2}\n''${LINE3}"
+      echo "{\"text\": \"''${BATTERY_DISPLAY}\", \"tooltip\": \"Battery: ''${BATTERY}%\"}"
+    '';
+  };
+
+  home.file.".config/waybar/volume-bar.sh" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
+      [ "$VOLUME" -gt 100 ] && VOLUME=100
+
+      TOTAL_BLOCKS=14
+      FILLED=$(( VOLUME * TOTAL_BLOCKS / 100 ))
+      EMPTY=$(( TOTAL_BLOCKS - FILLED ))
+
+      FILLED_BAR=""
+      for ((i=0; i<$FILLED; i++)); do FILLED_BAR="''${FILLED_BAR}█"; done
+      EMPTY_BAR=""
+      for ((i=0; i<$EMPTY; i++)); do EMPTY_BAR="''${EMPTY_BAR}░"; done
+
+      LINE1="╔══════════════╗"
+      LINE2="║''${FILLED_BAR}''${EMPTY_BAR}║"
+      LINE3="╚══════════════╝"
+
+      echo "{\"text\": \"''${LINE1}\n''${LINE2}\n''${LINE3}\", \"tooltip\": \"Volume: ''${VOLUME}%\"}"
+    '';
+  };
+
+  home.file.".config/waybar/wifi-bar.sh" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      ESSID=$(nmcli -t -f ACTIVE,SSID dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2)
+      SIGNAL=$(nmcli -t -f ACTIVE,SIGNAL dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2)
+      [ -z "$SIGNAL" ] && SIGNAL=0
+
+      INTERIOR_WIDTH=10
+      FILLED_WIDTH=$(( SIGNAL * INTERIOR_WIDTH / 100 ))
+
+      FILLED=""
+      for ((i=0; i<$FILLED_WIDTH; i++)); do FILLED="''${FILLED}█"; done
+      EMPTY=""
+      for ((i=$FILLED_WIDTH; i<$INTERIOR_WIDTH; i++)); do EMPTY="''${EMPTY}░"; done
+
+      LINE1="╔══════════╗"
+      LINE2="║''${FILLED}''${EMPTY}║"
+      LINE3="╚══════════╝"
+
+      echo "{\"text\": \"''${LINE1}\n''${LINE2}\n''${LINE3}\", \"tooltip\": \"''${ESSID} (''${SIGNAL}%)\"}"
+    '';
+  };
+
+  home.file.".config/waybar/cpu-spark.sh" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      FILE="/tmp/cpu-spark"
+      MAXLEN=10
+
+      read -r cpu user nice system idle iowait irq softirq steal guest guest_nice < /proc/stat
+      total=$((user+nice+system+idle+iowait+irq+softirq+steal))
+      idle_all=$((idle+iowait))
+
+      if [ -f "$FILE.prev" ]; then
+        read -r prev_total prev_idle < "$FILE.prev"
+        diff_total=$((total - prev_total))
+        diff_idle=$((idle_all - prev_idle))
+        usage=$(( (100*(diff_total-diff_idle)) / diff_total ))
+      else
+        usage=0
+      fi
+
+      echo "$total $idle_all" > "$FILE.prev"
+
+      if   [ "$usage" -lt 25 ]; then dot="_"
+      elif [ "$usage" -lt 50 ]; then dot="."
+      elif [ "$usage" -lt 75 ]; then dot=":"
+      else dot="░"
+      fi
+
+      history=$(cat "$FILE" 2>/dev/null || echo "")
+      history="$history$dot"
+      history=$(echo "$history" | tail -c $MAXLEN)
+      echo "$history" > "$FILE"
+
+      echo "{\"text\": \"CPU ''${usage}% ''${history}\", \"tooltip\": \"CPU: ''${usage}%\"}"
+    '';
+  };
+
+  home.file.".config/waybar/memory.sh" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      mem=$(free | awk '/Mem:/ {print int($3/$2 * 100)}')
+      echo "{\"text\": \"MEM ''${mem}%\", \"tooltip\": \"Memory: ''${mem}%\"}"
+    '';
+  };
+
+  # --- waybar itself ---
   programs.waybar = {
     enable = true;
     systemd.enable = true;
 
-    style = ''
-      * {
-        font-family: "Terminus", "Font Awesome 5 Free", monospace;
-        font-size: 11px;
-        min-height: 20px;
-        border: none;
-        border-radius: 0;
-      }
+style = ''
+  * {
+    font-family: "Terminus", "Font Awesome 5 Free", monospace;
+    font-size: 11px;
+    min-height: 20px;
+    border: none;
+    border-radius: 0;
+  }
 
-      window#waybar {
-        background: ${t.bgAlt};
-        border-bottom: 1px solid ${t.pinkDim};
-        color: ${t.fg};
-      }
+  window#waybar {
+    background: ${t.bgAlt};
+    border-bottom: 1px solid ${t.pinkDim};
+    color: ${t.fg};
+  }
 
-      #workspaces button {
-        padding: 0 10px;
-        color: ${t.fgMuted};
-        background: transparent;
-        border-bottom: 2px solid transparent;
-      }
+  #custom-launcher {
+    color: ${t.pink};
+    padding: 0 14px;
+    font-size: 12px;
+  }
+  #custom-launcher:hover { color: ${t.cyan}; }
 
-      #workspaces button.active,
-      #workspaces button.focused {
-        color: ${t.pink};
-        border-bottom: 2px solid ${t.pink};
-      }
+  #wlr-taskbar { padding: 0 6px; }
 
-      #workspaces button:hover {
-        color: ${t.cyan};
-        border-bottom: 2px solid ${t.cyan};
-      }
+  #clock {
+    color: ${t.cyan};
+    padding: 0 12px;
+  }
 
-      #clock {
-        color: ${t.cyan};
-        padding: 0 12px;
-        border-left: 1px solid ${t.pinkDim};
-      }
+  #custom-cpu    { color: ${t.orange}; padding: 0 8px; }
+  #custom-memory { color: ${t.yellow}; padding: 0 8px; }
+  #custom-wifi   { color: ${t.cyan};   padding: 0 8px; }
+  #custom-battery { color: ${t.yellow}; padding: 0 8px; }
+  #custom-volume  { color: ${t.pink};   padding: 0 8px; }
 
-      #cpu { color: ${t.orange}; padding: 0 10px; }
-      #memory { color: ${t.yellow}; padding: 0 10px; }
-      #disk { color: ${t.fgMuted}; padding: 0 10px; }
+  #tray { padding: 0 8px; }
 
-      #network {
-        color: ${t.cyan};
-        padding: 0 10px;
-      }
-
-      #pulseaudio {
-        color: ${t.pink};
-        padding: 0 10px;
-      }
-
-      #pulseaudio.muted {
-        color: ${t.fgMuted};
-      }
-
-      #battery {
-        color: ${t.yellow};
-        padding: 0 10px;
-      }
-
-      #battery.charging { color: ${t.cyan}; }
-      #battery.critical:not(.charging) { color: ${t.pink}; }
-
-      #tray {
-        padding: 0 8px;
-        border-left: 1px solid ${t.pinkDim};
-      }
-
-      #custom-launcher {
-        color: ${t.pink};
-        padding: 0 14px;
-        font-size: 13px;
-        border-right: 1px solid ${t.pinkDim};
-      }
-
-      #custom-launcher:hover { color: ${t.cyan}; }
-
-      tooltip {
-        background: ${t.bgAlt};
-        border: 1px solid ${t.pinkDim};
-        color: ${t.fg};
-      }
-    '';
-
+  tooltip {
+    background: ${t.bgAlt};
+    border: 1px solid ${t.pinkDim};
+    color: ${t.fg};
+  }
+'';
     settings = [{
       layer = "top";
       position = "top";
@@ -108,17 +186,17 @@ in
       modules-center = [ "clock" ];
 
       modules-right = [
-        "cpu"
-        "memory"
-        "network"
-        "battery"
-        "pulseaudio"
+        "custom/cpu"
+        "custom/memory"
+        "custom/wifi"
+        "custom/battery"
+        "custom/volume"
         "tray"
       ];
 
       "custom/launcher" = {
         format = "[ ! ]";
-        on-click = "kitty --class fsel -e fsel";
+        on-click = "kitty --detach -e fsel -d";
         tooltip = false;
       };
 
@@ -135,39 +213,34 @@ in
         tooltip-format = "{:%A, %B %d %Y}";
       };
 
-      cpu = {
-        format = " {usage}%";
-        tooltip = false;
+      "custom/cpu" = {
+        exec = "~/.config/waybar/cpu-spark.sh";
         interval = 2;
+        return-type = "json";
       };
 
-      memory = {
-        format = " {}%";
+      "custom/memory" = {
+        exec = "~/.config/waybar/memory.sh";
         interval = 5;
+        return-type = "json";
       };
 
-      network = {
-        format-wifi = " {essid}";
-        format-ethernet = " {ifname}";
-        format-disconnected = " --";
-        tooltip-format = "{ifname}: {ipaddr}";
+      "custom/wifi" = {
+        exec = "~/.config/waybar/wifi-bar.sh";
+        interval = 10;
+        return-type = "json";
       };
 
-      battery = {
-        states = { warning = 30; critical = 15; };
-        format = "{icon} {capacity}%";
-        format-charging = " {capacity}%";
-        format-icons = [ "" "" "" "" "" ];
+      "custom/battery" = {
+        exec = "~/.config/waybar/battery-bar.sh";
+        interval = 30;
+        return-type = "json";
       };
 
-      pulseaudio = {
-        format = "{icon} {volume}%";
-        format-muted = " muted";
-        format-icons = {
-          default = [ "" "" "" ];
-        };
-        on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-        scroll-step = 5;
+      "custom/volume" = {
+        exec = "~/.config/waybar/volume-bar.sh";
+        interval = 2;
+        return-type = "json";
       };
 
       tray = {

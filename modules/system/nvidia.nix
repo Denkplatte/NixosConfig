@@ -37,12 +37,14 @@
   };
 
   # Add necessary environment variables for Wayland + NVIDIA
-  environment.sessionVariables = {
+  environment.variables = {
   # NVIDIA-specific (critical)
   WLR_NO_HARDWARE_CURSORS = "1";
   LIBVA_DRIVER_NAME = "nvidia";
   GBM_BACKEND = "nvidia-drm";
   __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  XCURSOR_THEME = "Adwaita";
+  XCUROSOR_SIZE = "24";
   
   # Firefox
   MOZ_ENABLE_WAYLAND = "1";
