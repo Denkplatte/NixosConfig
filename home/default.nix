@@ -12,8 +12,6 @@
   };
 
   imports = [
-	./modules/user-packages.nix
-	./builds/otter-launcher.nix
         ./builds/fsel.nix
 	./programs/kitty.nix
 	./programs/waybar.nix
