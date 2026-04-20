@@ -5,79 +5,84 @@ let
 in
 {
   # --- script files ---
-  home.file.".config/waybar/battery-bar.sh" = {
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      BATTERY=$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo "?")
-      CHARGING=$(cat /sys/class/power_supply/BAT0/status 2>/dev/null | grep -q "Charging" && echo "+" || echo "")
+ home.file."/.config/waybar/battery-bar.sh" = {
+  text = ''
+    #!/usr/bin/env bash
+    BATTERY=$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo "?")
+    STATUS=$(cat /sys/class/power_supply/BAT0/status 2>/dev/null || echo "Unknown")
+    CHARGING=$(echo "$STATUS" | grep -q "Charging" && echo "⚡" || echo "")
 
-      INTERIOR_WIDTH=14
-      FILLED_WIDTH=$(( BATTERY * INTERIOR_WIDTH / 100 ))
+    INTERIOR_WIDTH=14
+    FILLED_WIDTH=$(( BATTERY * INTERIOR_WIDTH / 100 ))
 
-      FILLED=""
-      for ((i=0; i<$FILLED_WIDTH; i++)); do FILLED="''${FILLED}█"; done
-      EMPTY=""
-      for ((i=$FILLED_WIDTH; i<$INTERIOR_WIDTH; i++)); do EMPTY="''${EMPTY}░"; done
-      EMPTY="''${EMPTY} "
+    FILLED=""
+    for ((i=0; i<$FILLED_WIDTH; i++)); do FILLED="''${FILLED}█"; done
 
-      LINE1="╔══════════════╗"
-      LINE2="║''${FILLED}''${EMPTY}║''${CHARGING}"
-      LINE3="╚══════════════╝"
+    EMPTY=""
+    for ((i=$FILLED_WIDTH; i<$INTERIOR_WIDTH; i++)); do EMPTY="''${EMPTY}░"; done
 
-      BATTERY_DISPLAY="''${LINE1}\n''${LINE2}\n''${LINE3}"
-      echo "{\"text\": \"''${BATTERY_DISPLAY}\", \"tooltip\": \"Battery: ''${BATTERY}%\"}"
-    '';
-  };
+    LINE1="   ╔══════════════╗"
+    LINE2="\uf240 ║''${FILLED}''${EMPTY}"" ║""''${CHARGING}"
+    LINE3="   ╚══════════════╝"
 
-  home.file.".config/waybar/volume-bar.sh" = {
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
-      [ "$VOLUME" -gt 100 ] && VOLUME=100
+    echo "{\"text\": \"''${LINE1}\n''${LINE2}\n''${LINE3}\", \"tooltip\": \"Battery: ''${BATTERY}% (''${STATUS})\"}"
+  '';
+  executable = true;
+};
 
-      TOTAL_BLOCKS=14
-      FILLED=$(( VOLUME * TOTAL_BLOCKS / 100 ))
-      EMPTY=$(( TOTAL_BLOCKS - FILLED ))
+home.file."/.config/waybar/volume-bar.sh" = {
+  text = ''
+    #!/usr/bin/env bash
+    VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
 
-      FILLED_BAR=""
-      for ((i=0; i<$FILLED; i++)); do FILLED_BAR="''${FILLED_BAR}█"; done
-      EMPTY_BAR=""
-      for ((i=0; i<$EMPTY; i++)); do EMPTY_BAR="''${EMPTY_BAR}░"; done
+    if [ "$VOLUME" -gt 100 ]; then
+        VOLUME=100
+    fi
 
-      LINE1="╔══════════════╗"
-      LINE2="║''${FILLED_BAR}''${EMPTY_BAR}║"
-      LINE3="╚══════════════╝"
+    TOTAL_BLOCKS=20
+    FILLED=$(( VOLUME * TOTAL_BLOCKS / 100 ))
+    EMPTY=$(( TOTAL_BLOCKS - FILLED ))
 
-      echo "{\"text\": \"''${LINE1}\n''${LINE2}\n''${LINE3}\", \"tooltip\": \"Volume: ''${VOLUME}%\"}"
-    '';
-  };
+    FILLED_BAR=""
+    for ((i=0; i<$FILLED; i++)); do FILLED_BAR="''${FILLED_BAR}#"; done
 
-  home.file.".config/waybar/wifi-bar.sh" = {
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      ESSID=$(nmcli -t -f ACTIVE,SSID dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2)
-      SIGNAL=$(nmcli -t -f ACTIVE,SIGNAL dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2)
-      [ -z "$SIGNAL" ] && SIGNAL=0
+    EMPTY_BAR=""
+    for ((i=0; i<$EMPTY; i++)); do EMPTY_BAR="''${EMPTY_BAR}-"; done
 
-      INTERIOR_WIDTH=10
-      FILLED_WIDTH=$(( SIGNAL * INTERIOR_WIDTH / 100 ))
+    BAR="[''${FILLED_BAR}''${EMPTY_BAR}] $VOLUME%"
 
-      FILLED=""
-      for ((i=0; i<$FILLED_WIDTH; i++)); do FILLED="''${FILLED}█"; done
-      EMPTY=""
-      for ((i=$FILLED_WIDTH; i<$INTERIOR_WIDTH; i++)); do EMPTY="''${EMPTY}░"; done
+    echo "{\"text\": \"\uf028" "$BAR\", \"tooltip\": \"Volume: $VOLUME%\"}"
+  '';
+  executable = true;
+};
+home.file."/.config/waybar/wifi-bar.sh" = {
+  text = ''
+    #!/usr/bin/env bash
+    ESSID=$(nmcli -t -f ACTIVE,SSID dev wifi | grep '^yes' | cut -d: -f2)
+    SIGNAL=$(nmcli -t -f ACTIVE,SIGNAL dev wifi | grep '^yes' | cut -d: -f2)
 
-      LINE1="╔══════════╗"
-      LINE2="║''${FILLED}''${EMPTY}║"
-      LINE3="╚══════════╝"
+    if [ -z "$SIGNAL" ]; then
+        SIGNAL=0
+        ESSID="disconnected"
+    fi
 
-      echo "{\"text\": \"''${LINE1}\n''${LINE2}\n''${LINE3}\", \"tooltip\": \"''${ESSID} (''${SIGNAL}%)\"}"
-    '';
-  };
+    INTERIOR_WIDTH=10
+    FILLED_WIDTH=$(( SIGNAL * INTERIOR_WIDTH / 100 ))
 
+    FILLED=""
+    for ((i=0; i<$FILLED_WIDTH; i++)); do FILLED="''${FILLED}█"; done
+
+    EMPTY=""
+    for ((i=$FILLED_WIDTH; i<$INTERIOR_WIDTH; i++)); do EMPTY="''${EMPTY}░"; done
+
+    LINE1="   ╔══════════╗"
+    LINE2="\uf1eb ║''${FILLED}''${EMPTY}║"
+    LINE3="   ╚══════════╝"
+
+    echo "{\"text\": \"''${LINE1}\n''${LINE2}\n''${LINE3}\", \"tooltip\": \"Wi-Fi: ''${ESSID} (''${SIGNAL}%)\"}"
+  '';
+  executable = true;
+};
   home.file.".config/waybar/cpu-spark.sh" = {
     executable = true;
     text = ''
@@ -131,7 +136,7 @@ in
 
 style = ''
   * {
-    font-family: "Terminus", "Font Awesome 5 Free", monospace;
+    font-family: "Terminus", "Font Awesome 7 Free", monospace;
     font-size: 11px;
     min-height: 20px;
     border: none;
@@ -161,7 +166,7 @@ style = ''
   #custom-cpu    { color: ${t.orange}; padding: 0 8px; }
   #custom-memory { color: ${t.yellow}; padding: 0 8px; }
   #custom-wifi   { color: ${t.cyan};   padding: 0 8px; }
-  #custom-battery { color: ${t.yellow}; padding: 0 8px; }
+  #custom-battery { color: ${t.yellow}; padding: 0 8px; font-weight: 900; }
   #custom-volume  { color: ${t.pink};   padding: 0 8px; }
 
   #tray { padding: 0 8px; }
@@ -239,7 +244,8 @@ style = ''
 
       "custom/volume" = {
         exec = "~/.config/waybar/volume-bar.sh";
-        interval = 2;
+        interval = "once";
+	signal = 8;
         return-type = "json";
       };
 

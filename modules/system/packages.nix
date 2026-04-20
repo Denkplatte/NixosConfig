@@ -10,7 +10,7 @@ environment.systemPackages = with pkgs; [
    figlet
    lolcat
    imagemagick
-   greetd.tuigreet     
+   tuigreet     
    libinput
    pulseaudio
    seatd

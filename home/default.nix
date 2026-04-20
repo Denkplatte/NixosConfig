@@ -12,6 +12,7 @@
   };
 
   imports = [
+	./modules/user-mimeapps.nix
         ./builds/fsel.nix
 	./programs/kitty.nix
 	./programs/waybar.nix

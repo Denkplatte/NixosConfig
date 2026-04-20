@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+qe{ pkgs, ... }:
 
 let
   t = import ../../theme/hotline-miami.nix;
