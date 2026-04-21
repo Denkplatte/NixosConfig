@@ -10,9 +10,9 @@ in
     #!/usr/bin/env bash
     BATTERY=$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo "?")
     STATUS=$(cat /sys/class/power_supply/BAT0/status 2>/dev/null || echo "Unknown")
-    CHARGING=$(echo "$STATUS" | grep -q "Charging" && echo "⚡" || echo "")
+    echo "$STATUS" | grep -q "Charging" && CHARGING="⚡" || CHARGING=""
 
-    INTERIOR_WIDTH=14
+    INTERIOR_WIDTH=10
     FILLED_WIDTH=$(( BATTERY * INTERIOR_WIDTH / 100 ))
 
     FILLED=""
@@ -21,14 +21,15 @@ in
     EMPTY=""
     for ((i=$FILLED_WIDTH; i<$INTERIOR_WIDTH; i++)); do EMPTY="''${EMPTY}░"; done
 
-    LINE1="   ╔══════════════╗"
-    LINE2="\uf240 ║''${FILLED}''${EMPTY}"" ║""''${CHARGING}"
-    LINE3="   ╚══════════════╝"
+    LINE1="   ╔══════════╗"
+    LINE2="   ║''${FILLED}''${EMPTY}║║''${CHARGING}"
+    LINE3="   ╚══════════╝"
 
     echo "{\"text\": \"''${LINE1}\n''${LINE2}\n''${LINE3}\", \"tooltip\": \"Battery: ''${BATTERY}% (''${STATUS})\"}"
   '';
   executable = true;
 };
+
 
 home.file."/.config/waybar/volume-bar.sh" = {
   text = ''
@@ -66,20 +67,15 @@ home.file."/.config/waybar/wifi-bar.sh" = {
         ESSID="disconnected"
     fi
 
-    INTERIOR_WIDTH=10
-    FILLED_WIDTH=$(( SIGNAL * INTERIOR_WIDTH / 100 ))
+    BAR1=$([ "$SIGNAL" -ge 20 ] && echo "▂" || echo "░")
+    BAR2=$([ "$SIGNAL" -ge 40 ] && echo "▃" || echo "░")
+    BAR3=$([ "$SIGNAL" -ge 60 ] && echo "▅" || echo "░")
+    BAR4=$([ "$SIGNAL" -ge 80 ] && echo "▆" || echo "░")
+    BAR5=$([ "$SIGNAL" -ge 95 ] && echo "█" || echo "░")
 
-    FILLED=""
-    for ((i=0; i<$FILLED_WIDTH; i++)); do FILLED="''${FILLED}█"; done
+    BARS="\uf1eb ''${BAR1}''${BAR2}''${BAR3}''${BAR4}''${BAR5}"
 
-    EMPTY=""
-    for ((i=$FILLED_WIDTH; i<$INTERIOR_WIDTH; i++)); do EMPTY="''${EMPTY}░"; done
-
-    LINE1="   ╔══════════╗"
-    LINE2="\uf1eb ║''${FILLED}''${EMPTY}║"
-    LINE3="   ╚══════════╝"
-
-    echo "{\"text\": \"''${LINE1}\n''${LINE2}\n''${LINE3}\", \"tooltip\": \"Wi-Fi: ''${ESSID} (''${SIGNAL}%)\"}"
+    echo "{\"text\": \" ''${BARS}\", \"tooltip\": \"Wi-Fi: ''${ESSID} (''${SIGNAL}%)\"}"
   '';
   executable = true;
 };
@@ -166,8 +162,8 @@ style = ''
   #custom-cpu    { color: ${t.orange}; padding: 0 8px; }
   #custom-memory { color: ${t.yellow}; padding: 0 8px; }
   #custom-wifi   { color: ${t.cyan};   padding: 0 8px; }
-  #custom-battery { color: ${t.yellow}; padding: 0 8px; font-weight: 900; }
-  #custom-volume  { color: ${t.pink};   padding: 0 8px; }
+  #custom-battery { color: ${t.yellow}; padding: 0 8px;}
+  #custom-volume  { color: ${t.pink};   padding: 0 8px;}
 
   #tray { padding: 0 8px; }
 
@@ -180,7 +176,7 @@ style = ''
     settings = [{
       layer = "top";
       position = "top";
-      height = 22;
+      height = 32;
       exclusive = true;
 
       modules-left = [
