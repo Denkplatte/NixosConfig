@@ -2,6 +2,15 @@
 
 {
 
+ xdg.desktopEntries.fsel = {
+    name = "fsel";
+    exec = "kitty --class fsel -e fsel";
+    terminal = false;
+    type = "Application";
+    categories = [ "System" ];
+  };
+
+
 home.file.".config/fsel/config.toml".text = ''
   terminal_launcher = "kitty -e"
 

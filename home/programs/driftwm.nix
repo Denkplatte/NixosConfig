@@ -79,9 +79,10 @@ in
     "mod+r"            = "reload-config"
 
     # --- apps ---
-    "mod+d"            = "exec kitty --detach -e fsel -d"
+    "mod+d"            = "exec kitty  --class fsel --detach -e fsel -d"
     "mod+e"            = "exec kitty --class superfile -e superfile"
     "mod+b"            = "exec firefox"
+    "mod+shift+p"      = "exec kitty --class power-menu -e power-menu"
 
     # --- window management ---
     "mod+f"            = "toggle-fullscreen"
@@ -175,6 +176,7 @@ in
     opacity = 0.95
     blur = true
     decoration = "none"
+    size = [600, 400]
 
     [[window_rules]]
     app_id = "superfile"
@@ -185,5 +187,13 @@ in
     app_id = "kitty"
     opacity = 0.97
     blur = true
+    size = [600, 400]
+ 
+    [[window_rules]]
+    app_id = "power-menu"
+    opacity = 0.97
+    blur    = true
+    decoration = "none"
+    size    = [500, 350]
   '';
 }

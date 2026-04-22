@@ -7,14 +7,18 @@
         ]
       },
       "locked": {
-        "path": "./home/builds/driftwm",
-        "type": "path"
+        "lastModified": 1776724420,
+        "narHash": "sha256-2xXloG9+FWsmNebK3iE6Jha9o6FdtVAYgxU9vAele0c=",
+        "owner": "malbiruk",
+        "repo": "driftwm",
+        "rev": "6da83e6fc517d9e15c1fd82f34b67c3d87a6aa3e",
+        "type": "github"
       },
       "original": {
-        "path": "./home/builds/driftwm",
-        "type": "path"
-      },
-      "parent": []
+        "owner": "malbiruk",
+        "repo": "driftwm",
+        "type": "github"
+      }
     },
     "fenix": {
       "inputs": {

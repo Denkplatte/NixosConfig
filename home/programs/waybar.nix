@@ -197,7 +197,7 @@ style = ''
 
       "custom/launcher" = {
         format = "[ ! ]";
-        on-click = "kitty --detach -e fsel -d";
+        on-click = "kitty --class fsel --detach -e fsel -d";
         tooltip = false;
       };
 
