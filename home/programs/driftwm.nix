@@ -194,6 +194,6 @@ in
     opacity = 0.97
     blur    = true
     decoration = "none"
-    size    = [500, 350]
+    size    = [900, 350]
   '';
 }

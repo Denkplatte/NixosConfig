@@ -191,7 +191,7 @@ style = ''
         "custom/memory"
         "custom/wifi"
         "custom/battery"
-        "custom/volume"
+        "custom/volume"	
         "tray"
       ];
 
@@ -205,12 +205,13 @@ style = ''
         on-click = "activate";
         on-click-middle = "close";
         format = "{name}";
+	group-same = true;
         max-length = 20;
       };
 
       clock = {
         format = " {:%H:%M}";
-        format-alt = " {:%Y-%m-%d %H:%M}";
+        format-alt = " {:%d-%m-%Y %H:%M}";
         tooltip-format = "{:%A, %B %d %Y}";
       };
 

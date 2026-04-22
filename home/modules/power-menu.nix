@@ -5,10 +5,14 @@ in
 {
   home.packages = [
     (pkgs.writeShellScriptBin "power-menu" ''
+      cols=$(tput cols)
+      item_width=25
+      pad=$(printf '%*s' "$(( (cols - item_width) / 2 ))" "")
+
       banner=$(
         {
           printf '\033[38;2;0;229;204m'
-          ${pkgs.figlet}/bin/figlet -f standard "POWER" -c
+          ${pkgs.figlet}/bin/figlet -cf banner3-D "POWER"
           printf '\033[0m'
         } | ${pkgs.boxes}/bin/boxes -d ansi-double
       )
@@ -19,18 +23,20 @@ in
       {
         printf '%s\n' "$banner"
         printf '\n'
-        printf '\033[38;2;255;107;26m  ⏻  Shutdown\033[0m\n'
-        printf '\033[38;2;255;107;26m  ↺  Reboot\033[0m\n'
-        printf '\033[38;2;0;229;204m  ⏾  Suspend\033[0m\n'
-        printf '\033[38;2;122;110;138m  ⇥  Logout\033[0m\n'
+        printf "''${pad}\033[38;2;255;107;26m⏻  Shutdown\033[0m\n"
+        printf "''${pad}\033[38;2;255;107;26m↺  Reboot\033[0m\n"
+        printf "''${pad}\033[38;2;0;229;204m⏾  Suspend\033[0m\n"
+        printf "''${pad}\033[38;2;122;110;138m⇥  Logout\033[0m\n"
       } | ${pkgs.fzf}/bin/fzf \
             --ansi \
             --no-info \
             --no-border \
-            --prompt="  " \
-            --pointer="▌" \
+            --no-separator \
+            --prompt="" \
+            --pointer=" " \
             --height=100% \
             --layout=reverse \
+            --highlight-line \
             --color="bg:#1a0a2e,bg+:#120720,fg:#e8e0d5,fg+:#00e5cc,pointer:#ff2d78,hl:#00e5cc,hl+:#00e5cc" \
             --header-lines="$((banner_lines + 1))" \
       | {
