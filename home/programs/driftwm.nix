@@ -53,11 +53,6 @@ in
     distance = 24.0
     break_force = 32.0
 
-    [decorations]
-    bg_color = "${t.bgAlt}"
-    fg_color = "${t.pink}"
-    corner_radius = 6
-
     [effects]
     blur_radius = 2
     blur_strength = 1.1
@@ -79,7 +74,7 @@ in
     "mod+r"            = "reload-config"
 
     # --- apps ---
-    "mod+d"            = "exec kitty  --app-id fsel --detach -e fsel-menu"
+    "mod+d"            = "exec kitty --app-id fsel -e fsel-menu"
     "mod+e"            = "exec kitty --class superfile -e superfile"
     "mod+b"            = "exec firefox"
     "mod+shift+p"      = "exec kitty --app-id power-menu --detach -e power-menu"
@@ -177,18 +172,15 @@ in
     blur = true
     decoration = "none"
     size = [600, 400]
+    position = [0, 0]
 
-    [[window_rules]]
-    app_id = "superfile"
-    opacity = 0.95
-    blur = true
-    size = [1200, 900]
-
+  
     [[window_rules]]
     app_id = "kitty"
     opacity = 0.97
     blur = true
-    size = [600, 400]
+    size = [800, 600]
+    position = [0, 0]
  
     [[window_rules]]
     app_id = "power-menu"
@@ -196,6 +188,7 @@ in
     blur    = true
     decoration = "none"
     size    = [900, 350]
+    position = [0, 0]
 
    [[window_rules]]
     app_id = "btop"
@@ -203,13 +196,15 @@ in
     blur    = true
     decoration = "none"
     size    = [1200, 900]
-   
+    position = [0, 0]
+
     [[window_rules]]
     app_id = "superfile"
     opacity = 0.97
     blur    = true
     decoration = "none"
     size    = [1200, 900]
+    position = [0, 0]
 
   '';
 }

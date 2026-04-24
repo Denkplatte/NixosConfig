@@ -11,22 +11,27 @@ in
 
       banner=$(
         {
-          printf '\033[38;2;0;229;204m'
+          printf '\033[38;2;255;42;138m'   # t.pink  = #ff2a8a
           ${pkgs.figlet}/bin/figlet -cf banner3-D "POWER"
           printf '\033[0m'
         } | ${pkgs.boxes}/bin/boxes -d ansi-double
       )
 
-      banner=$(printf '\033[38;2;255;45;120m%s\033[0m' "$banner")
+      # wrap banner in purple (t.purple = #7a00ff → 122;0;255)
+      banner=$(printf '\033[38;2;122;0;255m%s\033[0m' "$banner")
       banner_lines=$(printf '%s\n' "$banner" | wc -l)
 
       {
         printf '%s\n' "$banner"
         printf '\n'
-        printf "''${pad}\033[38;2;255;107;26m⏻  Shutdown\033[0m\n"
-        printf "''${pad}\033[38;2;255;107;26m↺  Reboot\033[0m\n"
-        printf "''${pad}\033[38;2;0;229;204m⏾  Suspend\033[0m\n"
-        printf "''${pad}\033[38;2;122;110;138m⇥  Logout\033[0m\n"
+        # orange  t.orange  = #ff5a1f → 255;90;31
+        printf "''${pad}\033[38;2;255;90;31m⏻  Shutdown\033[0m\n"
+        # pink    t.pink    = #ff2a8a → 255;42;138
+        printf "''${pad}\033[38;2;255;42;138m↺  Reboot\033[0m\n"
+        # teal    t.teal    = #00ffd5 → 0;255;213
+        printf "''${pad}\033[38;2;0;255;213m⏾  Suspend\033[0m\n"
+        # fgMuted t.fgMuted = #6e5a8a → 110;90;138
+        printf "''${pad}\033[38;2;110;90;138m⇥  Logout\033[0m\n"
       } | ${pkgs.fzf}/bin/fzf \
             --ansi \
             --no-info \
@@ -37,7 +42,7 @@ in
             --height=100% \
             --layout=reverse \
             --highlight-line \
-            --color="bg:#1a0a2e,bg+:#120720,fg:#e8e0d5,fg+:#00e5cc,pointer:#ff2d78,hl:#00e5cc,hl+:#00e5cc" \
+            --color="bg:${t.bg},bg+:${t.bgAlt},fg:${t.fg},fg+:${t.teal},pointer:${t.pink},hl:${t.teal},hl+:${t.teal}" \
             --header-lines="$((banner_lines + 1))" \
       | {
           read -r choice
@@ -51,18 +56,15 @@ in
         }
     '')
 
- (pkgs.writeShellScriptBin "power-menu-launcher" ''
-  #!/bin/sh
-  # --class sets the WM_CLASS (X11) or app_id (Wayland)
-  # --name sets the instance name
-  exec kitty \
-    --app-id "power-menu" \
-    --name "power-menu" \
-    --title "Power Menu" \
-    -e power-menu
-'')
- 
- ];
+    (pkgs.writeShellScriptBin "power-menu-launcher" ''
+      #!/bin/sh
+      exec kitty \
+        --app-id "power-menu" \
+        --name "power-menu" \
+        --title "Power Menu" \
+        -e power-menu
+    '')
+  ];
 
   xdg.desktopEntries.power-menu = {
     name = "Power Menu";

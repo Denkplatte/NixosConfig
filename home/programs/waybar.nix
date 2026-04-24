@@ -140,8 +140,8 @@ style = ''
   }
 
   window#waybar {
-    background: ${t.bgAlt};
-    border-bottom: 1px solid ${t.pinkDim};
+    background: ${t.bg};
+    border-bottom: 1px solid ${t.purple};
     color: ${t.fg};
   }
 
@@ -149,28 +149,52 @@ style = ''
     color: ${t.pink};
     padding: 0 14px;
     font-size: 12px;
+   
   }
-  #custom-launcher:hover { color: ${t.cyanBr}; }
+  #custom-launcher:hover { color: ${t.teal}; }
 
   #wlr-taskbar { padding: 0 6px; }
 
-  #clock {
-    color: ${t.cyanBr};
-    padding: 0 12px;
+  /* taskbar active window gets a pink underline */
+  #wlr-taskbar button.active {
+    border-bottom: 2px solid ${t.pink};
+    color: ${t.fg};
+  }
+  #wlr-taskbar button {
+    color: ${t.fgMuted};
+    padding: 0 6px;
   }
 
-  #custom-cpu    { color: ${t.orange}; padding: 0 8px; }
-  #custom-memory { color: ${t.yellow}; padding: 0 8px; }
-  #custom-wifi   { color: ${t.cyanBr};   padding: 0 8px; }
-  #custom-battery { color: ${t.yellow}; padding: 0 8px;}
-  #custom-volume  { color: ${t.pink};   padding: 0 8px;}
+  #clock {
+    color: ${t.teal};
+    padding: 0 12px;
+   
+  }
 
-  #tray { padding: 0 8px; }
+  /* semantic colour mapping:
+     orange = heat (CPU)
+     yellow = memory pressure
+     green  = disk (storage = calm)
+     teal   = network
+     yellow = battery (warn when low)
+     pink   = volume (audio = personality) */
+  #custom-cpu    { color: ${t.orange};   padding: 0 8px; }
+  #custom-memory { color: ${t.yellow};   padding: 0 8px; }
+  #custom-disk   { color: ${t.green};    padding: 0 8px; }
+  #custom-wifi   { color: ${t.teal};     padding: 0 8px; }
+  #custom-battery{ color: ${t.yellow};   padding: 0 8px; }
+  #custom-volume { color: ${t.pink};     padding: 0 8px; }
+
+  #tray {
+    padding: 0 8px;
+   
+  }
 
   tooltip {
     background: ${t.bgAlt};
-    border: 1px solid ${t.pinkDim};
+    border: 1px solid ${t.purple};
     color: ${t.fg};
+    border-radius: 4px;
   }
 '';
     settings = [{

@@ -35,17 +35,14 @@ in
     enable = true;
     settings = {
       default_session = {
-        command = ''
-          ${pkgs.tuigreet}/bin/tuigreet \
-            --remember \
-            --remember-session \
-            --time \
-            --issue \
-            --theme "border=magenta;text=white;prompt=magenta;time=cyan;action=cyan;button=magenta;container=black;input=yellow"
-            --env WLR_NO_HARDWARE_CURSORS = 1 \
-	    --env XCURSOR_THEME = Adwaita \
-	    --env XCURSOR_SIZE = 24 \   
-	 '';
+         command = ''
+ 	 ${pkgs.tuigreet}/bin/tuigreet \
+    	--remember \
+    	--remember-session \
+    	--time \
+    	--issue \
+    	--theme "border=${t.purple};text=${t.fg};prompt=${t.pink};time=${t.teal};action=${t.teal};button=${t.pink};container=${t.bg};input=${t.yellow}"
+	'';
         user = "greeter";
       };
     };
