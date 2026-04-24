@@ -79,7 +79,7 @@ in
     "mod+r"            = "reload-config"
 
     # --- apps ---
-    "mod+d"            = "exec kitty  --class fsel --detach -e fsel -d"
+    "mod+d"            = "exec kitty  --app-id fsel --detach -e fsel-menu"
     "mod+e"            = "exec kitty --class superfile -e superfile"
     "mod+b"            = "exec firefox"
     "mod+shift+p"      = "exec kitty --app-id power-menu --detach -e power-menu"
@@ -196,5 +196,20 @@ in
     blur    = true
     decoration = "none"
     size    = [900, 350]
+
+   [[window_rules]]
+    app_id = "btop"
+    opacity = 0.97
+    blur    = true
+    decoration = "none"
+    size    = [1200, 900]
+   
+    [[window_rules]]
+    app_id = "superfile"
+    opacity = 0.97
+    blur    = true
+    decoration = "none"
+    size    = [1200, 900]
+
   '';
 }

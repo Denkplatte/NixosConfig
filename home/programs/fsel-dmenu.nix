@@ -21,7 +21,11 @@ let
     }
     {
       name = "btop";
-      cmd = "kitty --app-id btop --detach -e btop";
+      cmd = "kitty -o 'initial_window_width=200c' -o 'initial_window_height=100c' --app-id btop --detach -e btop ";
+    }
+    {
+      name = "Superfile";
+      cmd = "kitty --app-id superfile --detach -e superfile";
     }
   ];
 
