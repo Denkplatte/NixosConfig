@@ -150,18 +150,18 @@ style = ''
     padding: 0 14px;
     font-size: 12px;
   }
-  #custom-launcher:hover { color: ${t.cyan}; }
+  #custom-launcher:hover { color: ${t.cyanBr}; }
 
   #wlr-taskbar { padding: 0 6px; }
 
   #clock {
-    color: ${t.cyan};
+    color: ${t.cyanBr};
     padding: 0 12px;
   }
 
   #custom-cpu    { color: ${t.orange}; padding: 0 8px; }
   #custom-memory { color: ${t.yellow}; padding: 0 8px; }
-  #custom-wifi   { color: ${t.cyan};   padding: 0 8px; }
+  #custom-wifi   { color: ${t.cyanBr};   padding: 0 8px; }
   #custom-battery { color: ${t.yellow}; padding: 0 8px;}
   #custom-volume  { color: ${t.pink};   padding: 0 8px;}
 

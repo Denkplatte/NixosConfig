@@ -50,11 +50,23 @@ in
           esac
         }
     '')
-  ];
+
+ (pkgs.writeShellScriptBin "power-menu-launcher" ''
+  #!/bin/sh
+  # --class sets the WM_CLASS (X11) or app_id (Wayland)
+  # --name sets the instance name
+  exec kitty \
+    --app-id "power-menu" \
+    --name "power-menu" \
+    --title "Power Menu" \
+    -e power-menu
+'')
+ 
+ ];
 
   xdg.desktopEntries.power-menu = {
     name = "Power Menu";
-    exec = "kitty --class power-menu -e power-menu";
+    exec = "power-menu-launcher";
     terminal = false;
     type = "Application";
     icon = "system-shutdown";

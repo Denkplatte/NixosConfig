@@ -19,7 +19,7 @@ in
       selection_foreground  = t.bg;
       cursor                = t.pink;
       cursor_text_color     = t.bg;
-      url_color             = t.cyan;
+      url_color             = t.cyanBr;
 
       color0  = t.black;
       color8  = t.blackBr;

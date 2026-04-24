@@ -82,7 +82,7 @@ in
     "mod+d"            = "exec kitty  --class fsel --detach -e fsel -d"
     "mod+e"            = "exec kitty --class superfile -e superfile"
     "mod+b"            = "exec firefox"
-    "mod+shift+p"      = "exec kitty --class power-menu -e power-menu"
+    "mod+shift+p"      = "exec kitty --app-id power-menu --detach -e power-menu"
 
     # --- window management ---
     "mod+f"            = "toggle-fullscreen"
@@ -182,6 +182,7 @@ in
     app_id = "superfile"
     opacity = 0.95
     blur = true
+    size = [1200, 900]
 
     [[window_rules]]
     app_id = "kitty"
