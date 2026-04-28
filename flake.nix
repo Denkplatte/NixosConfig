@@ -8,6 +8,8 @@
     };
     fsel.url = "github:Mjoyufull/fsel";
 
+    gazelle.url = "github:Zeus-Deus/gazelle-tui";	
+
     driftwm = {
 	#url = "path:./home/builds/driftwm";
 	url = "github:malbiruk/driftwm";
@@ -15,7 +17,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, driftwm, ... }:
+  outputs = { self, nixpkgs, home-manager, driftwm, gazelle, ... }:
   let
     system = "x86_64-linux";
   in {
@@ -24,7 +26,14 @@
       modules = [
         ./hosts/Denkplatte/configuration.nix
         home-manager.nixosModules.home-manager
-        { home-manager.users."las" = import ./home/default.nix; }
+        { home-manager.users."las" = import ./home/default.nix; 
+
+	home-manager.sharedModules = [
+    	  gazelle.homeModules.gazelle
+  	];
+
+	}
+
 	({pkgs, ... }:{
 	  environment.systemPackages = [
 	    driftwm.packages.${system}.default

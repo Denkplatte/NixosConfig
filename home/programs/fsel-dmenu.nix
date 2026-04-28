@@ -7,15 +7,19 @@ let
     { name = "Power Menu";    cmd = "power-menu-launcher"; }
     { name = "Firefox";       cmd = "firefox"; }
     { name = "Terminal";      cmd = "kitty"; }
-    { name = "Unreal Engine"; cmd = "launch-unreal"; }
+    { name = "Unreal Engine"; cmd = "unreal-launcher"; }
     { name = "btop";          cmd = "kitty -o 'initial_window_width=200c' -o 'initial_window_height=100c' --app-id btop --detach -e btop"; }
     { name = "Superfile";     cmd = "kitty --app-id superfile --detach -e superfile"; }
   ];
 
   menuList = builtins.concatStringsSep "\n" (map (e: e.name) menuEntries);
 
-  caseBlock = builtins.concatStringsSep "\n"
-    (map (e: ''        "${e.name}") setsid ${e.cmd} & ;;'') menuEntries);
+ caseBlock =
+    builtins.concatStringsSep "\n"
+      (map (entry: ''
+        "${entry.name}") ${entry.cmd} ;;
+      '') menuEntries);
+
 
 in
 {

@@ -229,7 +229,7 @@ style = ''
         on-click = "activate";
         on-click-middle = "close";
         format = "{name}";
-	group-same = true;
+	sort-by-app-id = true;
         max-length = 20;
       };
 
@@ -267,6 +267,7 @@ style = ''
         exec = "~/.config/waybar/volume-bar.sh";
         interval = "once";
 	signal = 8;
+	on-click = "kitty --app-id wiremix --detach -e wiremix";
         return-type = "json";
       };
 
