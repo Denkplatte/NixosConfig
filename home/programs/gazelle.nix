@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, gazellePackage, ... }:
 {
   programs.gazelle = {
     enable = true;
@@ -6,4 +6,6 @@
       theme = "textual-dark";
     };
   };
+
+  home.packages = [ gazellePackage ];
 }

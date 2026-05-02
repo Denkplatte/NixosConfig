@@ -34,25 +34,36 @@ in
 home.file."/.config/waybar/volume-bar.sh" = {
   text = ''
     #!/usr/bin/env bash
-    VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
+    RAW=$(LC_ALL=C wpctl get-volume @DEFAULT_AUDIO_SINK@)
+    MUTED=$(echo "$RAW" | grep -q MUTED && echo "1" || echo "0")
+    VOLUME=$(echo "$RAW" | awk '{printf "%d", $2 * 100}')
 
     if [ "$VOLUME" -gt 100 ]; then
         VOLUME=100
     fi
 
-    TOTAL_BLOCKS=20
-    FILLED=$(( VOLUME * TOTAL_BLOCKS / 100 ))
-    EMPTY=$(( TOTAL_BLOCKS - FILLED ))
+    # treat volume=0 as muted too
+    if [ "$MUTED" = "1" ] || [ "$VOLUME" -eq 0 ]; then
+      ICON="🔇"
+      BAR="[--------------------] MUTE"
+      TOOLTIP="Volume: muted"
+    else
+      TOTAL_BLOCKS=20
+      FILLED=$(( VOLUME * TOTAL_BLOCKS / 100 ))
+      EMPTY=$(( TOTAL_BLOCKS - FILLED ))
 
-    FILLED_BAR=""
-    for ((i=0; i<$FILLED; i++)); do FILLED_BAR="''${FILLED_BAR}#"; done
+      FILLED_BAR=""
+      for ((i=0; i<FILLED; i++)); do FILLED_BAR="''${FILLED_BAR}#"; done
 
-    EMPTY_BAR=""
-    for ((i=0; i<$EMPTY; i++)); do EMPTY_BAR="''${EMPTY_BAR}-"; done
+      EMPTY_BAR=""
+      for ((i=0; i<EMPTY; i++)); do EMPTY_BAR="''${EMPTY_BAR}-"; done
 
-    BAR="[''${FILLED_BAR}''${EMPTY_BAR}] $VOLUME%"
+      ICON="🔊"
+      BAR="[''${FILLED_BAR}''${EMPTY_BAR}] ''${VOLUME}%"
+      TOOLTIP="Volume: ''${VOLUME}%"
+    fi
 
-    echo "{\"text\": \"\uf028" "$BAR\", \"tooltip\": \"Volume: $VOLUME%\"}"
+    echo "{\"text\": \"''${ICON} ''${BAR}\", \"tooltip\": \"''${TOOLTIP}\"}"
   '';
   executable = true;
 };

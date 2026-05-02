@@ -40,6 +40,7 @@ environment.systemPackages = with pkgs; [
    brightnessctl
    adwaita-icon-theme
    wiremix
+   impala
 
   ];
 }

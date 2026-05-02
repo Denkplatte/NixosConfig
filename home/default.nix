@@ -20,7 +20,7 @@
 	./programs/superfile.nix
 	./programs/driftwm.nix
 	./programs/fsel-dmenu.nix
-	./programs/gazelle.nix
+	
   ];
 
 }

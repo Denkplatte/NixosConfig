@@ -32,6 +32,9 @@
     	  gazelle.homeModules.gazelle
   	];
 
+	home-manager.extraSpecialArgs = { gazellePackage = gazelle.packages.${system}.default; };
+
+
 	}
 
 	({pkgs, ... }:{
