@@ -14,7 +14,7 @@
   imports = [
 	./modules/user-mimeapps.nix
 	./modules/power-menu.nix
-        ./builds/fsel.nix
+        ./programs/fsel.nix
 	./programs/kitty.nix
 	./programs/waybar.nix
 	./programs/superfile.nix

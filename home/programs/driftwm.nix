@@ -172,7 +172,6 @@ in
     blur = true
     decoration = "none"
     size = [600, 400]
-    position = [0, 0]
 
   
     [[window_rules]]
@@ -180,23 +179,21 @@ in
     opacity = 0.97
     blur = true
     size = [800, 600]
-    position = [0, 0]
- 
+    
     [[window_rules]]
     app_id = "power-menu"
     opacity = 0.97
     blur    = true
     decoration = "none"
     size    = [900, 350]
-    position = [0, 0]
-
+   
    [[window_rules]]
     app_id = "btop"
     opacity = 0.97
     blur    = true
     decoration = "none"
     size    = [1200, 900]
-    position = [0, 0]
+   
 
     [[window_rules]]
     app_id = "superfile"
@@ -204,7 +201,6 @@ in
     blur    = true
     decoration = "none"
     size    = [1200, 900]
-    position = [0, 0]
-
+   
   '';
 }

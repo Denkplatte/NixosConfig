@@ -44,7 +44,7 @@ home.file."/.config/waybar/volume-bar.sh" = {
 
     # treat volume=0 as muted too
     if [ "$MUTED" = "1" ] || [ "$VOLUME" -eq 0 ]; then
-      ICON="🔇"
+      ICON="󰖁"
       BAR="[--------------------] MUTE"
       TOOLTIP="Volume: muted"
     else
@@ -58,7 +58,7 @@ home.file."/.config/waybar/volume-bar.sh" = {
       EMPTY_BAR=""
       for ((i=0; i<EMPTY; i++)); do EMPTY_BAR="''${EMPTY_BAR}-"; done
 
-      ICON="🔊"
+      ICON="󰖀"
       BAR="[''${FILLED_BAR}''${EMPTY_BAR}] ''${VOLUME}%"
       TOOLTIP="Volume: ''${VOLUME}%"
     fi
@@ -265,6 +265,7 @@ style = ''
       "custom/wifi" = {
         exec = "~/.config/waybar/wifi-bar.sh";
         interval = 10;
+	on-click = "kitty --app-id nmtui --detach -e nmtui";
         return-type = "json";
       };
 
