@@ -13,7 +13,8 @@
 
   imports = [
 	./modules/user-mimeapps.nix
-	./modules/power-menu.nix
+	./modules/figletfonts.nix
+	./programs/power-menu.nix
         ./programs/fsel.nix
 	./programs/kitty.nix
 	./programs/waybar.nix
