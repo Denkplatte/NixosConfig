@@ -25,7 +25,6 @@ environment.systemPackages = with pkgs; [
    mesa-demos
    gamescope
    nix-ld
-   fuzzel
    xwayland-satellite
    networkmanager
    fzf
@@ -40,7 +39,12 @@ environment.systemPackages = with pkgs; [
    brightnessctl
    adwaita-icon-theme
    wiremix
-   impala
+   blobdrop
+   yazi
+   ffmpegthumbnailer   # yazi: video thumbnails
+   unar                # yazi: archive previews  
+   poppler-utils       # yazi: PDF previews (note the hyphen, not underscore)
+   file                # yazi: mime-type detection
 
   ];
 }

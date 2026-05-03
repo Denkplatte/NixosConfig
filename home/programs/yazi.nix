@@ -4,16 +4,6 @@ let
   t = import ../../theme/hotline-miami.nix;
 in
 {
-  # ─── packages ────────────────────────────────────────────────────────────────
-  # blobdrop is in nixpkgs so no custom build needed
-  home.packages = with pkgs; [
-    # optional but highly recommended for yazi previews:
-    ffmpegthumbnailer   # video thumbnails
-    unar                # archive previews
-    poppler_utils       # PDF previews (pdftotext)
-    file                # mime-type detection (yazi needs this)
-  ];
-
   # ─── yazi.toml ───────────────────────────────────────────────────────────────
   # General behaviour — keeping it close to superfile's feel:
   # single-column layout (miller columns disabled via ratio), file preview on,

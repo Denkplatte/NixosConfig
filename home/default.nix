@@ -21,7 +21,7 @@
 	./programs/superfile.nix
 	./programs/driftwm.nix
 	./programs/fsel-dmenu.nix
-	
+	./programs/yazi.nix
   ];
 
 }
