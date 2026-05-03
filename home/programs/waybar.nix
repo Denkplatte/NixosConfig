@@ -67,6 +67,43 @@ home.file."/.config/waybar/volume-bar.sh" = {
   '';
   executable = true;
 };
+
+systemd.user.services.waybar-volume-watcher = {
+  Unit = {
+    Description = "PipeWire volume event watcher for Waybar";
+    After = [ "pipewire.service" "waybar.service" ];
+    PartOf = [ "graphical-session.target" ];
+  };
+  Service = {
+    ExecStart = "%h/.config/waybar/volume-watcher.sh";
+    Restart = "on-failure";
+    RestartSec = "2s";
+  };
+  Install = {
+    WantedBy = [ "graphical-session.target" ];
+  };
+};
+
+home.activation.startWatcher = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  systemctl --user enable --now waybar-volume-watcher.service || true
+'';
+
+
+home.file."/.config/waybar/volume-watcher.sh" = {
+  text = ''
+    #!/usr/bin/env bash
+    # Watches PipeWire for volume/mute changes and signals waybar.
+    # pactl subscribe gives us a stream of events like:
+    #   Event 'change' on sink #0
+    # We filter for sink events (which cover volume + mute).
+    pactl subscribe 2>/dev/null | grep --line-buffered "sink" | while read -r _; do
+      pkill -SIGRTMIN+8 waybar
+    done
+  '';
+  executable = true;
+};
+
+
 home.file."/.config/waybar/wifi-bar.sh" = {
   text = ''
     #!/usr/bin/env bash
@@ -140,6 +177,7 @@ home.file."/.config/waybar/wifi-bar.sh" = {
   programs.waybar = {
     enable = true;
     systemd.enable = true;
+
 
 style = ''
   * {
