@@ -54,6 +54,7 @@ in
       cursor_blink_interval    = "0";
       scrollback_lines         = 10000;
       copy_on_select           = "yes";
+      confirm_os_window_close  = 0;
     };
 
     keybindings = {

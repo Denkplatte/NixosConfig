@@ -178,6 +178,7 @@ in
     app_id = "kitty"
     opacity = 0.97
     blur = true
+    decoration = "server"
     size = [800, 600]
     
     [[window_rules]]
@@ -199,7 +200,7 @@ in
     app_id = "superfile"
     opacity = 0.97
     blur    = true
-    decoration = "none"
+    decoration = "server"
     size    = [1200, 900]
    
   '';
