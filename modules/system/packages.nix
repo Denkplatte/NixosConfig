@@ -45,6 +45,7 @@ environment.systemPackages = with pkgs; [
    unar                # yazi: archive previews  
    poppler-utils       # yazi: PDF previews (note the hyphen, not underscore)
    file                # yazi: mime-type detection
-   lufus
+   woeusb
+   tofi
   ];
 }
