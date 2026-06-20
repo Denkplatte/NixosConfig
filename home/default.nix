@@ -22,6 +22,8 @@
 	./programs/driftwm.nix
 	./programs/fsel-dmenu.nix
 	./programs/yazi.nix
+        ./programs/tofi.nix
+	./programs/fzf-launcher.nix
   ];
 
 }
