@@ -270,7 +270,7 @@ style = ''
 
       "custom/launcher" = {
         format = "[ ! ]";
-        on-click = "kitty --app-id fsel --detach -e fsel-menu";
+        on-click = "kitty --app-id fzf-launcher --detach -e fzf-launcher";
         tooltip = false;
       };
 

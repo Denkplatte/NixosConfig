@@ -1,13 +1,39 @@
 { pkgs, ... }:
 
 {
-  # fzf, figlet, and desktop-file-utils are already provided system-wide via
-  # modules/system/packages.nix — only libnotify (for notify-send) is new here.
-  home.packages = [
+  # fzf, figlet, boxes, and desktop-file-utils are already provided system-wide
+  # via modules/system/packages.nix — only libnotify (for notify-send) is new here.
+home.packages = [
     pkgs.libnotify
 
     (pkgs.writeShellScriptBin "fzf-launcher" ''
       #!/usr/bin/env bash
+
+      cols=$(tput cols)
+      rows=$(tput lines)
+
+      # ── left panel: a single static "[!]" banner, shown via fzf's preview window ──
+      preview_pct=35
+      preview_width=$(( cols * preview_pct / 100 - 4 ))  # rough allowance for border + padding
+      (( preview_width < 10 )) && preview_width=10
+
+      raw_banner=$(figlet -d ~/.local/share/figlet/fonts -f 'ANSI Shadow' '[!]' 2>/dev/null \
+        || figlet '[!]' 2>/dev/null)
+
+      banner_width=$(printf '%s\n' "$raw_banner" | awk '{ print length }' | sort -rn | head -1)
+      banner_height=$(printf '%s\n' "$raw_banner" | wc -l)
+
+      h_pad=$(( (preview_width - banner_width) / 2 ))
+      (( h_pad < 0 )) && h_pad=0
+      v_pad=$(( (rows - banner_height) / 2 ))
+      (( v_pad < 0 )) && v_pad=0
+
+      banner_file=$(mktemp)
+      trap 'rm -f "$banner_file"' EXIT
+      {
+        for _ in $(seq "$v_pad"); do echo; done
+        printf '%s\n' "$raw_banner" | sed "s/^/$(printf '%*s' "$h_pad" "")/"
+      } > "$banner_file"
 
       # Define search paths for desktop files
       search_paths=(
@@ -28,15 +54,12 @@
           for desktop_file in "$path"/*.desktop; do
             [ -f "$desktop_file" ] || continue
 
-            # Skip hidden applications
             if grep -q "^NoDisplay=true" "$desktop_file" 2>/dev/null; then
               continue
             fi
 
-            # Extract name
             name=$(grep "^Name=" "$desktop_file" | head -n1 | cut -d= -f2-)
             if [ -n "$name" ]; then
-              # Store mapping from name to file path
               app_to_file["$name"]="$desktop_file"
               echo "$name" >> "$temp_apps"
             fi
@@ -44,21 +67,22 @@
         fi
       done
 
-      # Remove duplicates and sort
       apps=$(sort -u "$temp_apps")
       rm -f "$temp_apps"
 
-      # Show fzf menu with figlet header
-      choice=$(printf "%s\n" "$apps" | \
-        fzf --ansi \
-            --header="$(figlet -d ~/.local/share/figlet/fonts -f 'DOS Rebel' '[!] Apps' 2>/dev/null || figlet '[!] Apps' 2>/dev/null || echo '[!] Apps')" \
-            --prompt=">> " \
-            --layout=reverse-list)
+      # ── the menu: two columns via --preview, both borders via fzf's own border system ──
+      choice=$(
+        printf '%s\n' "$apps" \
+        | fzf --ansi \
+              --border=double \
+              --preview="cat '$banner_file'" \
+              --preview-window="left,''${preview_pct}%,border-double" \
+              --prompt=">> " \
+              --layout=reverse
+      )
 
-      # Exit if nothing was chosen
       [ -z "$choice" ] && exit 0
 
-      # Get the desktop file for the chosen app
       desktop_file="''${app_to_file[$choice]}"
 
       if [ -z "$desktop_file" ] || [ ! -f "$desktop_file" ]; then
@@ -66,7 +90,6 @@
         exit 1
       fi
 
-      # Extract Exec line
       exec_cmd=$(grep "^Exec=" "$desktop_file" | head -n1 | cut -d= -f2-)
 
       if [ -z "$exec_cmd" ]; then
@@ -74,20 +97,15 @@
         exit 1
       fi
 
-      # Clean up desktop file placeholders
       clean_cmd=$(echo "$exec_cmd" | sed -E 's/ *%[fFuUdDnNickvm]+//g' | sed 's/^ *//' | sed 's/ *$//')
-
-      # Check if we should run in terminal
       terminal=$(grep "^Terminal=" "$desktop_file" | cut -d= -f2- 2>/dev/null || echo "false")
 
-      # Launch with proper process detachment for window manager shortcuts
       if [ "$terminal" = "true" ]; then
         setsid kitty -e bash -c "$clean_cmd; read -p 'Press Enter to close...'" >/dev/null 2>&1 &
       else
         setsid bash -c "$clean_cmd" >/dev/null 2>&1 &
       fi
 
-      # Give the process a moment to start properly
       sleep 0.2
     '')
   ];

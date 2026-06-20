@@ -74,7 +74,7 @@ in
     "mod+r"            = "reload-config"
 
     # --- apps ---
-    "mod+d"            = "exec kitty --app-id fsel -e fsel-menu"
+    "mod+d"            = "exec kitty --app-id fzf-launcher -e fzf-launcher"
     "mod+e"            = "exec kitty --class superfile -e superfile"
     "mod+b"            = "exec firefox"
     "mod+shift+p"      = "exec kitty --app-id power-menu --detach -e power-menu"
@@ -202,6 +202,13 @@ in
     blur    = true
     decoration = "server"
     size    = [1200, 900]
+
+    [[window_rules]]
+    app_id = "fzf-launcher"
+    opacity = 0.97
+    blur    = true
+    decoration = "none"
+    size    = [800, 250]
    
   '';
 }
