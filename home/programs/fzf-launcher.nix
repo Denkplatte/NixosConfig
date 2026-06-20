@@ -2,9 +2,10 @@
 
 {
   # fzf, figlet, boxes, and desktop-file-utils are already provided system-wide
-  # via modules/system/packages.nix — only libnotify (for notify-send) is new here.
-home.packages = [
+  # via modules/system/packages.nix. We are adding libnotify and dex!
+  home.packages = [
     pkgs.libnotify
+    pkgs.dex
 
     (pkgs.writeShellScriptBin "fzf-launcher" ''
       #!/usr/bin/env bash
@@ -14,7 +15,7 @@ home.packages = [
 
       # ── left panel: a single static "[!]" banner, shown via fzf's preview window ──
       preview_pct=35
-      preview_width=$(( cols * preview_pct / 100 - 4 ))  # rough allowance for border + padding
+      preview_width=$(( cols * preview_pct / 100 - 4 ))  
       (( preview_width < 10 )) && preview_width=10
 
       raw_banner=$(figlet -d ~/.local/share/figlet/fonts -f 'ANSI Shadow' '[!]' 2>/dev/null \
@@ -90,21 +91,13 @@ home.packages = [
         exit 1
       fi
 
-      exec_cmd=$(grep "^Exec=" "$desktop_file" | head -n1 | cut -d= -f2-)
-
-      if [ -z "$exec_cmd" ]; then
-        notify-send "App Launcher" "No Exec command found for: $choice" -t 3000
-        exit 1
-      fi
-
-      clean_cmd=$(echo "$exec_cmd" | sed -E 's/ *%[fFuUdDnNickvm]+//g' | sed 's/^ *//' | sed 's/ *$//')
-      terminal=$(grep "^Terminal=" "$desktop_file" | cut -d= -f2- 2>/dev/null || echo "false")
-
-      if [ "$terminal" = "true" ]; then
-        setsid kitty -e bash -c "$clean_cmd; read -p 'Press Enter to close...'" >/dev/null 2>&1 &
-      else
-        setsid bash -c "$clean_cmd" >/dev/null 2>&1 &
-      fi
+      # ── THE FIX ──
+      # We tell dex what our preferred terminal is in case Terminal=true is set
+      export TERMINAL="kitty"
+      
+      # We use dex to natively launch the desktop file. This respects working directories,
+      # environment variables, nested quotes, and NixOS FHS wrappers natively!
+      setsid dex "$desktop_file" >/dev/null 2>&1 &
 
       sleep 0.2
     '')

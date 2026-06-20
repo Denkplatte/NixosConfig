@@ -24,6 +24,7 @@
 	./programs/yazi.nix
         ./programs/tofi.nix
 	./programs/fzf-launcher.nix
+	./desktop-entries.nix
   ];
 
 }
