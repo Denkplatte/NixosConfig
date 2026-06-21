@@ -7,6 +7,21 @@
     pkgs.libnotify
     pkgs.dex
 
+    (pkgs.writeShellScriptBin "fzf-launcher-toggle" ''
+    #!/bin/sh
+    PIDFILE="/tmp/fzf-launcher.pid"
+
+    if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+     exit 0
+    fi
+
+    echo $$ > "$PIDFILE"
+    trap 'rm -f "$PIDFILE"' EXIT
+
+    kitty --app-id app-launcher --title app-launcher fzf-launcher
+    '')
+   
+
     (pkgs.writeShellScriptBin "fzf-launcher" ''
       #!/usr/bin/env bash
 
@@ -80,6 +95,7 @@
               --preview-window="left,''${preview_pct}%,border-double" \
               --prompt=">> " \
               --layout=reverse
+	      --info=hidden
       )
 
       [ -z "$choice" ] && exit 0

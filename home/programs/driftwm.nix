@@ -74,7 +74,7 @@ in
     "mod+r"            = "reload-config"
 
     # --- apps ---
-    "mod+d"            = "exec kitty --app-id fzf-launcher -e fzf-launcher"
+    "mod+d"            = "exec fzf-launcher-toggle"
     "mod+e"            = "exec kitty --class superfile -e superfile"
     "mod+b"            = "exec firefox"
     "mod+shift+p"      = "exec kitty --app-id power-menu --detach -e power-menu"
@@ -166,13 +166,6 @@ in
     "4-finger-pinch-out" = "home-toggle"
 
     # --- window rules ---
-    [[window_rules]]
-    app_id = "fsel"
-    opacity = 0.95
-    blur = true
-    decoration = "none"
-    size = [600, 400]
-
   
     [[window_rules]]
     app_id = "kitty"
@@ -204,7 +197,7 @@ in
     size    = [1200, 900]
 
     [[window_rules]]
-    app_id = "fzf-launcher"
+    app_id = "fzf-launcher-toggle"
     opacity = 0.97
     blur    = true
     decoration = "none"
