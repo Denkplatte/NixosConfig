@@ -26,25 +26,23 @@
       modules = [
         ./hosts/Denkplatte/configuration.nix
         home-manager.nixosModules.home-manager
-        { home-manager.users."las" = import ./home/default.nix; 
-
-	home-manager.sharedModules = [
-    	  gazelle.homeModules.gazelle
-  	];
-
-	home-manager.extraSpecialArgs = { gazellePackage = gazelle.packages.${system}.default; };
-
-
-	}
-
-	({pkgs, ... }:{
-	  environment.systemPackages = [
-	    driftwm.packages.${system}.default
-	  ];
-	  services.displayManager.sessionPackages = [
-	    driftwm.packages.${system}.default
-	  ];
-	})
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users."las" = import ./home/default.nix;
+          home-manager.sharedModules = [ gazelle.homeModules.gazelle ];
+          home-manager.extraSpecialArgs = { 
+            gazellePackage = gazelle.packages.${system}.default; 
+          };
+        }
+        ({pkgs, ... }:{
+          environment.systemPackages = [
+            driftwm.packages.${system}.default
+          ];
+          services.displayManager.sessionPackages = [
+            driftwm.packages.${system}.default
+          ];
+        })
       ];
     };
   };
