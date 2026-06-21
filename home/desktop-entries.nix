@@ -1,34 +1,41 @@
 { pkgs, ... }:
 
 {
+
+  home.packages = [
+    (pkgs.writeShellScriptBin "launch-btop" ''
+      exec kitty --class btop btop
+    '')
+  ];
+
   # This tells Home Manager to generate custom .desktop files
   # and place them in your ~/.local/share/applications/
-  xdg.desktopEntries = {
-
-    # 1. FIXING BTOP
-    # We override the btop entry to explicitly force Kitty to launch it,
-    # bypassing dex's terminal confusion.
-    btop = {
-      name = "Btop";
-      genericName = "System Monitor";
-      exec = "kitty -e btop"; # Explicitly call your terminal!
-      terminal = false;       # Set to false because kitty is already spawning a window
-      categories = [ "System" "Monitor" ];
-      icon = "btop";
-    };
+  home.file.".local/share/applications/btop.desktop".text = ''
+    [Desktop Entry]
+    Name=Btop++
+    Exec=launch-btop
+    Type=Task Manager
+    Categories=System;
+    Terminal=false
+  '';
 
     # 2. FIXING UNREAL ENGINE
     # Unreal often needs to be wrapped in an FHS or run from a specific path.
     # Replace the exec path with your actual Unreal Engine FHS wrapper script.
-    unreal-engine = {
-      name = "Unreal Engine Editor";
-      genericName = "Game Engine";
-      # Example: Forcing it to run through a custom FHS wrapper script or standard bash
-      exec = "steam-run /home/las/Downloads/Linux_Unreal_Engine_5.6.1/Engine/Binaries/Linux/UnrealEditor"; 
-      terminal = false;
-      categories = [ "Development" ];
-      icon = "unreal-engine";
-    };
+     home.packages = [
+    (pkgs.writeShellScriptBin "unreallauncher" ''
+      exec ${pkgs.steam-run}/bin/steam-run /home/las/Downloads/Linux_Unreal_Engine_5.6.1/Engine/Binaries/Linux/UnrealEditor
+    '')
+  ];
 
-  };
+  home.file.".local/share/applications/unreal-engine.desktop".text = ''
+    [Desktop Entry]
+    Name=Unreal Engine Editor
+    Exec=unreallauncher
+    Type=Application
+    Categories=Development;
+    Terminal=false
+  '';
+
+  
 }
