@@ -24,7 +24,7 @@
       name = "Unreal Engine Editor";
       genericName = "Game Engine";
       # Example: Forcing it to run through a custom FHS wrapper script or standard bash
-      exec = "unreal-launcher"; 
+      exec = "steam-run /home/las/Downloads/Linux_Unreal_Engine_5.6.1/Engine/Binaries/Linux/UnrealEditor"; 
       terminal = false;
       categories = [ "Development" ];
       icon = "unreal-engine";
