@@ -96,6 +96,7 @@
               --prompt=">> " \
               --layout=reverse
 	      --info=hidden
+	      --no-info
       )
 
       [ -z "$choice" ] && exit 0

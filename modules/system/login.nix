@@ -3,18 +3,18 @@
 let
   t = import ../../theme/hotline-miami.nix;
 
-  xeroFonts = pkgs.fetchFromGitHub {
-    owner = "xero";
-    repo  = "figlet-fonts";
-    rev   = "master";
-    sha256 = "sha256-/Qj8CWqn7w1R83enixxgC5ijUrHvqN3C7ZvRCs/AzBI=";
-  };
+  #xeroFonts = pkgs.fetchFromGitHub {
+   # owner = "xero";
+   # repo  = "figlet-fonts";
+   # rev   = "master";
+   # sha256 = "sha256-/Qj8CWqn7w1R83enixxgC5ijUrHvqN3C7ZvRCs/AzBI=";
+  #};
 
   # Build the banner at Nix build time — outputs a plain text file
   bannerFile = pkgs.runCommand "greetd-banner" {
     nativeBuildInputs = [ pkgs.figlet pkgs.boxes ];
   } ''
-    figlet -f cricket "[ ! ]" \
+    figlet -d /home/las/.local/share/figlet/fonts -f 'Rectangles' "[ ! ]" \
       | ${pkgs.boxes}/bin/boxes -d ansi-double \
       > $out
   '';

@@ -46,6 +46,7 @@ environment.systemPackages = with pkgs; [
    poppler-utils       # yazi: PDF previews (note the hyphen, not underscore)
    file                # yazi: mime-type detection
    woeusb
-   tofi
+   oculante
+   
   ];
 }

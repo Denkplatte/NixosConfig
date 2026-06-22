@@ -197,11 +197,11 @@ in
     size    = [1200, 900]
 
     [[window_rules]]
-    app_id = "fzf-launcher-toggle"
+    app_id = "app-launcher"
     opacity = 0.97
     blur    = true
     decoration = "none"
-    size    = [800, 250]
+    size    = [850, 270]
    
   '';
 }
