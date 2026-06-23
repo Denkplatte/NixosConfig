@@ -73,9 +73,8 @@ in
 
     # --- apps ---
     "mod"              = "exec fzf-launcher-toggle"
-    "mod+e"            = "exec kitty --class superfile -e superfile"
+    "mod+e"            = "exec kitty --app-id superfile -e superfile"
     "mod+b"            = "exec firefox"
-    "mod+shift+p"      = "exec kitty --app-id power-menu --detach -e power-menu"
     "ctrl+alt+delete"  = "exec kitty --app-id btop --detach -e btop"
 
     # --- window management ---
@@ -173,12 +172,6 @@ in
     decoration = "server"
     size = [800, 600]
     
-    [[window_rules]]
-    app_id = "power-menu"
-    opacity = 0.97
-    blur    = true
-    decoration = "none"
-    size    = [900, 350]
    
    [[window_rules]]
     app_id = "btop"

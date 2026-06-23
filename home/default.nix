@@ -15,7 +15,6 @@
   imports = [
 	./modules/user-mimeapps.nix
 	./modules/figletfonts.nix
-	./programs/power-menu.nix
        	./programs/kitty.nix
 	./programs/waybar.nix
 	./programs/superfile.nix
