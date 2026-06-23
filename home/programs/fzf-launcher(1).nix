@@ -1,48 +1,5 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
-let
-  t = import ../../theme/hotline-miami.nix;
-
-  # ── tiny hex → "R;G;B" helper ─────────────────────────────────────────────
-  hexDigit = d: {
-    "0" = 0;  "1" = 1;  "2" = 2;  "3" = 3;
-    "4" = 4;  "5" = 5;  "6" = 6;  "7" = 7;
-    "8" = 8;  "9" = 9;  "a" = 10; "b" = 11;
-    "c" = 12; "d" = 13; "e" = 14; "f" = 15;
-  }.${d};
-
-  hexByte = s: (hexDigit (builtins.substring 0 1 s)) * 16
-             + (hexDigit (builtins.substring 1 1 s));
-
-  # "#ff5a1f" -> "255;90;31", ready to drop into \033[38;2;<rgb>m
-  rgb = hex:
-    let h = lib.toLower (lib.removePrefix "#" hex);
-    in "${toString (hexByte (builtins.substring 0 2 h))};"
-     + "${toString (hexByte (builtins.substring 2 2 h))};"
-     + "${toString (hexByte (builtins.substring 4 2 h))}";
-
-  # ── power options, shown at the bottom of the launcher ────────────────────
-  powerEntries = [
-    { icon = "⏻"; label = "Shut Down"; color = t.orange;  cmd = "systemctl poweroff"; }
-    { icon = "↺"; label = "Restart";   color = t.pink;    cmd = "systemctl reboot"; }
-    { icon = "󰒲"; label = "Suspend";   color = t.teal;    cmd = "systemctl suspend"; }
-    { icon = "󰗽"; label = "Log Out";   color = t.fgMuted; cmd = "loginctl terminate-user \"$USER\""; }
-  ];
-
-  dividerLabel = lib.concatStrings (lib.replicate 20 "─");
-
-  powerLine   = e: "printf '\\033[38;2;${rgb e.color}m${e.icon}  ${e.label}\\033[0m\\n'";
-  dividerLine = "printf '\\033[38;2;${rgb t.fgMuted}m${dividerLabel}\\033[0m\\n'";
-
-  powerBlockScript = lib.concatStringsSep "\n" ([ dividerLine ] ++ map powerLine powerEntries);
-
-  powerCaseBlock = ''
-    "${dividerLabel}") exit 0 ;;
-  '' + lib.concatStringsSep "\n" (map (e: ''
-    "${e.icon}  ${e.label}") ${e.cmd}; exit 0 ;;
-  '') powerEntries);
-
-in
 {
   # fzf, figlet, boxes, and desktop-file-utils are already provided system-wide
   # via modules/system/packages.nix. We are adding libnotify and dex!
@@ -63,7 +20,7 @@ in
 
     kitty --app-id app-launcher --title app-launcher fzf-launcher
     '')
-
+   
 
     (pkgs.writeShellScriptBin "fzf-launcher" ''
       #!/usr/bin/env bash
@@ -129,43 +86,25 @@ in
       apps=$(sort -u "$temp_apps")
       rm -f "$temp_apps"
 
-      # ── power options: colored, icon-prefixed, separated by a divider ──────
-      power_block=$(
-        ${powerBlockScript}
-      )
-
-      menu=$(
-        printf '%s\n' "$apps"
-        printf '%s\n' "$power_block"
-      )
-
       # ── the menu: two columns via --preview, both borders via fzf's own border system ──
       choice=$(
-        printf '%s\n' "$menu" \
+        printf '%s\n' "$apps" \
         | fzf --ansi \
               --border=double \
               --preview="cat '$banner_file'" \
               --preview-window="left,''${preview_pct}%,border-double" \
               --prompt=">> " \
-              --layout=reverse \
-              --no-info \
-              --color="bg:${t.bg},bg+:${t.bgAlt},fg+:-1,pointer:${t.pink},hl:${t.purple},hl+:${t.teal}"
+              --layout=reverse
+	      --info=hidden
+	      --no-info
       )
 
       [ -z "$choice" ] && exit 0
 
-      # Strip the ANSI codes we embedded in the power-menu lines so the
-      # `case` below can match on plain text.
-      choice_clean=$(printf '%s' "$choice" | sed -E 's/\x1b\[[0-9;]*m//g')
-
-      case "$choice_clean" in
-      ${powerCaseBlock}
-      esac
-
-      desktop_file="''${app_to_file[$choice_clean]}"
+      desktop_file="''${app_to_file[$choice]}"
 
       if [ -z "$desktop_file" ] || [ ! -f "$desktop_file" ]; then
-        notify-send "App Launcher" "Desktop file not found for: $choice_clean" -t 3000
+        notify-send "App Launcher" "Desktop file not found for: $choice" -t 3000
         exit 1
       fi
 

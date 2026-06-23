@@ -72,10 +72,11 @@ in
     "mod+r"            = "reload-config"
 
     # --- apps ---
-    "mod+d"            = "exec fzf-launcher-toggle"
+    "mod"              = "exec fzf-launcher-toggle"
     "mod+e"            = "exec kitty --class superfile -e superfile"
     "mod+b"            = "exec firefox"
     "mod+shift+p"      = "exec kitty --app-id power-menu --detach -e power-menu"
+    "ctrl+alt+delete"  = "exec kitty --app-id btop --detach -e btop"
 
     # --- window management ---
     "mod+f"            = "toggle-fullscreen"

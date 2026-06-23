@@ -6,6 +6,9 @@ let
   # Build the banner at Nix build time — outputs a plain text file
   bannerFile = pkgs.runCommand "greetd-banner" {
     nativeBuildInputs = [ pkgs.figlet pkgs.boxes ];
+    LANG    = "C.UTF-8";
+    LC_ALL  = "C.UTF-8";
+
   } ''
     figlet -d ${xeroFonts} -f 'ANSI Shadow' '[ ! ]' \
       | ${pkgs.boxes}/bin/boxes -d ansi-double \
