@@ -2,7 +2,7 @@
 
 let
   t = import ../../theme/hotline-miami.nix;
-
+  xeroFonts = import ../../thme/figletfonts.nix { inherit pkgs; };
   #xeroFonts = pkgs.fetchFromGitHub {
    # owner = "xero";
    # repo  = "figlet-fonts";
@@ -14,7 +14,7 @@ let
   bannerFile = pkgs.runCommand "greetd-banner" {
     nativeBuildInputs = [ pkgs.figlet pkgs.boxes ];
   } ''
-    figlet -d /home/las/.local/share/figlet/fonts -f 'Rectangles' "[ ! ]" \
+    figlet -d ${xeroFonts} -f 'Rectangles' "[ ! ]" \
       | ${pkgs.boxes}/bin/boxes -d ansi-double \
       > $out
   '';
