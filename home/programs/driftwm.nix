@@ -9,9 +9,7 @@ in
     mod_key = "super"
     focus_follows_mouse = true
 
-    autostart = [
-      "waybar",
-   ]
+    autostart = ["waybar"]
 
     [env]
     MOZ_ENABLE_WAYLAND = "1"
@@ -37,7 +35,7 @@ in
     accel_profile = "flat"
 
     [navigation]
-    friction = 0.94
+    drift = 0.7
     animation_speed = 0.3
     nudge_step = 20
     pan_step = 100.0
@@ -201,7 +199,14 @@ in
     opacity = 0.97
     blur    = true
     decoration = "none"
-    size    = [850, 270]
+    size    = [850, 350]
+
+    [[window_rules]]
+    app_id = "nmtui"
+    opacity = 0.97
+    blur    = true
+    decoration = "none"
+    size    = [850, 350]
    
   '';
 }
