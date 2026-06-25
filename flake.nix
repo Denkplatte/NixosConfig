@@ -6,18 +6,13 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    fsel.url = "github:Mjoyufull/fsel";
-
-    gazelle.url = "github:Zeus-Deus/gazelle-tui";	
-
     driftwm = {
-	#url = "path:./home/builds/driftwm";
 	url = "github:malbiruk/driftwm";
 	inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, driftwm, gazelle, ... }:
+  outputs = { self, nixpkgs, home-manager, driftwm, ... }:
   let
     system = "x86_64-linux";
   in {
@@ -30,10 +25,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users."las" = import ./home/default.nix;
-          home-manager.sharedModules = [ gazelle.homeModules.gazelle ];
-          home-manager.extraSpecialArgs = { 
-            gazellePackage = gazelle.packages.${system}.default; 
-          };
+   
         }
         ({pkgs, ... }:{
           environment.systemPackages = [
