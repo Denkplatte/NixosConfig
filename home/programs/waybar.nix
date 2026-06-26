@@ -201,7 +201,7 @@ home.file."/.config/waybar/vpn-bar.sh" = {
   # --- waybar itself ---
   programs.waybar = {
     enable = true;
-    systemd.enable = true;
+    systemd.enable = false;
 
 
 style = ''
