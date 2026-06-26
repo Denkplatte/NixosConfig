@@ -127,6 +127,31 @@ home.file."/.config/waybar/wifi-bar.sh" = {
   '';
   executable = true;
 };
+
+home.file."/.config/waybar/vpn-bar.sh" = {
+  text = ''
+    #!/usr/bin/env bash
+    # Prefer NetworkManager's view (gives us a friendly connection name).
+    VPN_NAME=$(nmcli -t -f TYPE,NAME connection show --active 2>/dev/null \
+      | awk -F: '$1 == "vpn" || $1 == "wireguard" { print $2; exit }')
+
+    # Fallback: a tunnel interface that's up, even if NM doesn't know about it.
+    if [ -z "$VPN_NAME" ]; then
+      IFACE=$(ip -o link show up 2>/dev/null \
+        | awk -F': ' '{print $2}' \
+        | grep -E '^(tun|wg|ppp)[0-9]*' | head -1)
+      [ -n "$IFACE" ] && VPN_NAME="$IFACE"
+    fi
+
+    if [ -n "$VPN_NAME" ]; then
+      echo "{\"text\": \"\uf084\", \"tooltip\": \"VPN: ''${VPN_NAME}\", \"class\": \"connected\"}"
+    else
+      echo "{\"text\": \"\uf084\", \"tooltip\": \"VPN: disconnected\", \"class\": \"disconnected\"}"
+    fi
+  '';
+  executable = true;
+};
+
   home.file.".config/waybar/cpu-spark.sh" = {
     executable = true;
     text = ''
@@ -233,6 +258,9 @@ style = ''
   #custom-wifi   { color: ${t.teal};     padding: 0 8px; }
   #custom-battery{ color: ${t.yellow};   padding: 0 8px; }
   #custom-volume { color: ${t.pink};     padding: 0 8px; }
+  #custom-vpn.connected    { color: ${t.green}; }
+  #custom-vpn.disconnected { color: ${t.fgMuted}; }
+
 
   #tray {
     padding: 0 8px;
@@ -263,6 +291,7 @@ style = ''
         "custom/cpu"
         "custom/memory"
         "custom/wifi"
+	"custom/vpn"
         "custom/battery"
         "custom/volume"	
         "tray"
@@ -304,6 +333,13 @@ style = ''
         exec = "~/.config/waybar/wifi-bar.sh";
         interval = 10;
 	on-click = "kitty --app-id nmtui --detach -e nmtui";
+        return-type = "json";
+      };
+ 
+      "custom/vpn" = {
+        exec = "~/.config/waybar/vpn-bar.sh";
+        interval = 5;
+        on-click = "kitty --app-id nmtui --detach -e nmtui";
         return-type = "json";
       };
 
