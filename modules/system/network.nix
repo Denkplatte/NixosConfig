@@ -1,4 +1,4 @@
-{...}:
+{pkgs,...}:
 
 {
   networking.hostName = "Denkplatte"; # Define your hostname.
@@ -12,6 +12,9 @@
   networking.networkmanager.enable = true;
  
   networking.firewall.allowedTCPPorts = [ 631 ];
+
+  networking.networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
+
   
 
    services.avahi = {

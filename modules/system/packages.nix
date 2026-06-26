@@ -47,6 +47,7 @@ environment.systemPackages = with pkgs; [
    file                # yazi: mime-type detection
    woeusb
    oculante
-   
+   qbittorrent
+   openvpn   
   ];
 }
