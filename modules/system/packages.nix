@@ -1,4 +1,4 @@
-{pkgs, ... }:
+{pkgs, pkgs-unstable, ... }:
 
 { 
 
@@ -48,6 +48,9 @@ environment.systemPackages = with pkgs; [
    woeusb
    oculante
    qbittorrent
-   openvpn   
+   openvpn
+   wpsoffice
+   unzip
+   pkgs-unstable.pdfcraft 
   ];
 }
