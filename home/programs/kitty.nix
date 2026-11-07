@@ -1,8 +1,5 @@
-{ pkgs, ... }:
+{ theme, ... }:
 
-let
-  t = import ../../theme/hotline-miami.nix;
-in
 {
   programs.kitty = {
     enable = true;
@@ -13,30 +10,30 @@ in
     };
 
     settings = {
-      background            = t.bg;
-      foreground            = t.fg;
-      selection_background  = t.pink;
-      selection_foreground  = t.bg;
-      cursor                = t.pink;
-      cursor_text_color     = t.bg;
-      url_color             = t.cyanBr;
+      background            = theme.bg;
+      foreground            = theme.fg;
+      selection_background  = theme.pink;
+      selection_foreground  = theme.bg;
+      cursor                = theme.pink;
+      cursor_text_color     = theme.bg;
+      url_color             = theme.cyanBr;
 
-      color0  = t.black;
-      color8  = t.blackBr;
-      color1  = t.red;
-      color9  = t.redBr;
-      color2  = t.green;
-      color10 = t.greenBr;
-      color3  = t.yellowAnsi;
-      color11 = t.yellowBr;
-      color4  = t.blue;
-      color12 = t.blueBr;
-      color5  = t.magenta;
-      color13 = t.magentaBr;
-      color6  = t.cyanAnsi;
-      color14 = t.cyanBr;
-      color7  = t.white;
-      color15 = t.whiteBr;
+      color0  = theme.black;
+      color8  = theme.blackBr;
+      color1  = theme.red;
+      color9  = theme.redBr;
+      color2  = theme.green;
+      color10 = theme.greenBr;
+      color3  = theme.yellowAnsi;
+      color11 = theme.yellowBr;
+      color4  = theme.blue;
+      color12 = theme.blueBr;
+      color5  = theme.magenta;
+      color13 = theme.magentaBr;
+      color6  = theme.cyanAnsi;
+      color14 = theme.cyanBr;
+      color7  = theme.white;
+      color15 = theme.whiteBr;
 
       window_padding_width    = 12;
       hide_window_decorations = "yes";
@@ -44,10 +41,10 @@ in
 
       tab_bar_style           = "powerline";
       tab_powerline_style     = "angled";
-      active_tab_background   = t.pink;
-      active_tab_foreground   = t.bg;
-      inactive_tab_background = t.bgAlt;
-      inactive_tab_foreground = t.fgMuted;
+      active_tab_background   = theme.pink;
+      active_tab_foreground   = theme.bg;
+      inactive_tab_background = theme.bgAlt;
+      inactive_tab_foreground = theme.fgMuted;
 
       enable_audio_bell        = "no";
       cursor_shape             = "block";

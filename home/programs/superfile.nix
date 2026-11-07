@@ -1,6 +1,7 @@
-# home/programs/superfile.nix
 { pkgs, ... }:
 {
+  home.packages = [ pkgs.superfile ];
+
   home.file.".config/superfile/config.toml" = {
     force = true;
     text = ''

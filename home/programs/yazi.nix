@@ -33,6 +33,14 @@ let
   };
 in
 {
+  home.packages = with pkgs; [
+    yazi
+    ffmpegthumbnailer   # video thumbnails
+    unar                # archive previews / extract
+    poppler-utils       # PDF previews
+    file                # mime-type detection
+  ];
+
   # ─── yazi.toml ───────────────────────────────────────────────────────────────
   # General behaviour — keeping it close to superfile's feel:
   # single-column layout (miller columns disabled via ratio), file preview on,
@@ -282,7 +290,7 @@ in
     icon_warn   = "󰀪"
     icon_error  = "󰅚"
   '';
-  # ─── desktop entry so it shows up in fsel-menu ───────────────────────────────
+  # ─── desktop entry so it shows up in the launcher ───────────────────────────────
   xdg.desktopEntries.yazi = {
     name = "Yazi";
     exec = "kitty --app-id yazi --detach -e yazi";

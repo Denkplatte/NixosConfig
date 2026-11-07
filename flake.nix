@@ -1,42 +1,32 @@
 {
-  description = "Clean NixOS config";
+  description = "Modular NixOS + Home Manager config";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/25.11";
+
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     driftwm = {
-	url = "github:malbiruk/driftwm";
-	inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:malbiruk/driftwm";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Claude Desktop for Linux. Intentionally NOT following our nixpkgs:
+    # it needs a newer Electron than the 25.11 release ships.
+    claude-desktop.url = "github:patrickjaja/claude-desktop-extra";
   };
 
-  outputs = { self, nixpkgs, home-manager, driftwm, ... }:
-  let
-    system = "x86_64-linux";
-  in {
-    nixosConfigurations.Denkplatte = nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        ./hosts/Denkplatte/configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users."las" = import ./home/default.nix;
-   
-        }
-        ({pkgs, ... }:{
-          environment.systemPackages = [
-            driftwm.packages.${system}.default
-          ];
-          services.displayManager.sessionPackages = [
-            driftwm.packages.${system}.default
-          ];
-        })
-      ];
+  outputs = inputs:
+    let
+      mkHost = import ./lib/mkHost.nix { inherit inputs; };
+    in
+    {
+      # Add a new machine: create hosts/<Hostname>/ and add one line here.
+      nixosConfigurations = {
+        Denkplatte = mkHost { hostname = "Denkplatte"; username = "las"; };
+      };
     };
-  };
 }
-
