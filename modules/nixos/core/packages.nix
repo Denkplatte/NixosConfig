@@ -1,6 +1,6 @@
 # System-wide CLI tools and apps. Program-specific packages live next to their
 # config (e.g. yazi/superfile in home/programs, kitty via programs.kitty).
-{ pkgs, ... }:
+{ pkgs, pkgs-unstable, ... }:
 
 {
   environment.systemPackages = with pkgs; [
@@ -33,6 +33,11 @@
     # graphics / gaming
     mesa-demos
     gamescope
+
+    # office / pdf
+    wpsoffice
+    unzip
+    pkgs-unstable.pdfcraft
 
     # misc
     woeusb

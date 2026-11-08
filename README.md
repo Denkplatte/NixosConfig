@@ -22,7 +22,8 @@ home/                     shared Home Manager config
 theme/                    colour palette + helpers (passed to modules as `theme`)
 ```
 
-Every module receives `hostname`, `username`, `theme` and `inputs` as arguments.
+Every module receives `hostname`, `username`, `theme`, `inputs` and `pkgs-unstable`
+(packages from nixos-unstable) as arguments.
 
 ## Rebuild
 

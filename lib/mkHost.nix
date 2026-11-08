@@ -12,7 +12,12 @@ let
   hostDir  = ../hosts + "/${hostname}";
   hostHome = hostDir + "/home.nix";
   theme    = import ../theme { inherit lib; };
-  args     = { inherit inputs hostname username theme; };
+  # Packages from nixos-unstable, e.g. `pkgs-unstable.pdfcraft`.
+  pkgs-unstable = import inputs.nixpkgs-unstable {
+    inherit system;
+    config.allowUnfree = true;
+  };
+  args = { inherit inputs hostname username theme pkgs-unstable; };
 in
 lib.nixosSystem {
   inherit system;
